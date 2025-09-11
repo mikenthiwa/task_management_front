@@ -39,8 +39,8 @@ const RegisterFormComponent = () => {
   });
 
   const SubmitForm = async (values: { email: string; password: string }) => {
-    await addUser(values);
-    setMode('Login');
+    const result = await addUser(values);
+    if (result.data === null) setMode('Login');
   };
 
   return (
@@ -50,7 +50,6 @@ const RegisterFormComponent = () => {
       py={4}
       borderRadius={2}
       boxShadow={3}
-      // width='100%'
       mx='auto'
       display='flex'
       flexDirection='column'
