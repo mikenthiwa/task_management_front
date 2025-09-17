@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { useAddUserMutation } from '@/core/services/users';
 import * as yup from 'yup';
+import { useRouter } from 'next/navigation';
 
 const RegisterSchema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Required'),
@@ -27,6 +28,7 @@ const RegisterSchema = yup.object().shape({
 
 const RegisterFormComponent = () => {
   const [mode, setMode] = useState<'Register' | 'Login'>('Register');
+  const router = useRouter();
   const [addUser, { isLoading }] = useAddUserMutation();
 
   const formik = useFormik({
@@ -40,7 +42,10 @@ const RegisterFormComponent = () => {
 
   const SubmitForm = async (values: { email: string; password: string }) => {
     const result = await addUser(values);
-    if (result.data === null) setMode('Login');
+    if (result.data === null) {
+      setMode('Login');
+      router.push('/login');
+    }
   };
 
   return (

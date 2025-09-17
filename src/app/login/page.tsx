@@ -1,8 +1,7 @@
-'use client';
 import { Box } from '@mui/material';
-import RegisterFormComponent from '@/features/register/components/register-form.component';
+import LoginFormComponent from '@/features/login/components/login-form.component';
 
-const RegisterPage = () => {
+export default function Page() {
   return (
     <Box
       display='flex'
@@ -13,9 +12,7 @@ const RegisterPage = () => {
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       }}
     >
-      <RegisterFormComponent />;
+      <LoginFormComponent />
     </Box>
   );
-};
-
-export default RegisterPage;
+}
