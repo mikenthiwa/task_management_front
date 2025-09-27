@@ -1,4 +1,5 @@
 import { api } from '@/core/services/api';
+import { Task } from '@/core/common/interfaces/task';
 import { ApiResponseWithData } from '@/core/common/interfaces/ApiResponse';
 
 interface GetTasksQuery {
@@ -6,15 +7,6 @@ interface GetTasksQuery {
   pageSize?: number;
   status?: string;
   assignedTo?: string;
-}
-
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  status: string;
-  assignedTo: string;
-  creator: string;
 }
 
 interface TasksResponse {
