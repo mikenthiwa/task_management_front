@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 import { TaskListComponent } from '@/features/tasks/components/task-list.component';
 import { Box, Grid, Typography } from '@mui/material';
 import { taskAPI } from '@/core/services/task';
-import { dispatch } from '@/store/store';
+import { createStore } from '@/store/store';
 import { PaginationClient } from '@/features/tasks/components/pagination-client.component';
 import { CustomInfoMessage } from '@/ui/custom-info-message';
 
@@ -11,10 +11,13 @@ export default async function Home({
 }: {
   searchParams: Promise<{ pageNumber: number }>;
 }) {
+  const store = createStore();
+
   const pageNumber = Number((await searchParams).pageNumber ?? 1);
-  const promise = dispatch(
-    taskAPI.endpoints.getTasks.initiate({ pageNumber }, { forceRefetch: true })
+  const promise = store.dispatch(
+    taskAPI.endpoints.getTasks.initiate({ pageNumber })
   );
+
   const { data } = await promise;
 
   if (!data) return;
