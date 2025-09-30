@@ -1,29 +1,45 @@
-'use client';
-import { useState } from 'react';
+export const dynamic = 'force-dynamic';
 import { TaskListComponent } from '@/features/tasks/components/task-list.component';
-import { Box, Grid, Pagination } from '@mui/material';
-import { useGetTasksQuery } from '@/core/services/task';
+import { Box, Grid, Typography } from '@mui/material';
+import { taskAPI } from '@/core/services/task';
+import { dispatch } from '@/store/store';
+import { PaginationClient } from '@/features/tasks/components/pagination-client.component';
+import { CustomInfoMessage } from '@/ui/custom-info-message';
 
-export default function Home() {
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const { data, isLoading } = useGetTasksQuery({ pageNumber });
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ pageNumber: number }>;
+}) {
+  const pageNumber = Number((await searchParams).pageNumber ?? 1);
+  const promise = dispatch(
+    taskAPI.endpoints.getTasks.initiate({ pageNumber }, { forceRefetch: true })
+  );
+  const { data } = await promise;
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  if (!data) return;
 
   return (
     <Box>
-      <Grid container spacing={2}>
-        <TaskListComponent tasks={data!.items!} />
-      </Grid>
-      <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>
-        <Pagination
-          count={Math.ceil(data!.count / 10)}
-          page={pageNumber}
-          onChange={(_, value) => setPageNumber(value)}
-        />
+      <Box className='mb-5 flex justify-between'>
+        <Typography variant='h5' fontWeight={700}>
+          All Tasks
+        </Typography>
       </Box>
+      {data.count === 0 && <CustomInfoMessage message='No tasks available' />}
+      {data.count > 0 && (
+        <Box>
+          <Grid container spacing={2}>
+            <TaskListComponent tasks={data!.items!} />
+          </Grid>
+          <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>
+            <PaginationClient
+              count={Math.ceil(data!.count / 10)}
+              page={pageNumber}
+            />
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 }

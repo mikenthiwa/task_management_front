@@ -1,6 +1,7 @@
 import { ErrorResponse } from '@/core/common/interfaces/ApiResponse';
 
 export function extractApiErrorMessage(error: ErrorResponse): string {
+  console.log('error', error);
   if (error.errors && typeof error.errors === 'object') {
     const firstKey = Object.keys(error.errors)[0];
     const list = (error.errors as Record<string, string[]>)[firstKey];

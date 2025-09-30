@@ -20,10 +20,12 @@
     "jsonwebtoken": "^9.0.2",
     "next": "15.5.2",
     "next-auth": "^5.0.0-beta.29",
+    "next-redux-wrapper": "^8.1.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-redux": "^9.2.0",
     "react-toastify": "^11.0.5",
+    "redux-persist": "^6.0.0",
     "yup": "^1.7.0",
     "zod": "^4.1.9"
   },
