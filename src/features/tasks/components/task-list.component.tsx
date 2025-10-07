@@ -1,4 +1,3 @@
-'use client';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
 import { Task } from '@/core/common/interfaces/task';
 import { Fragment } from 'react';

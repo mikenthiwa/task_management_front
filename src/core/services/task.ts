@@ -20,16 +20,19 @@ interface TasksResponse {
 export const taskAPI = api.injectEndpoints({
   endpoints: (build) => ({
     getTasks: build.query<TasksResponse, GetTasksQuery>({
-      query: (params) => ({
-        url: '/Tasks',
-        method: 'GET',
-        params: {
-          pageNumber: params.pageNumber || 1,
-          pageSize: params.pageSize || 10,
-          status: params.status,
-          assignedTo: params.assignedTo,
-        },
-      }),
+      query: (params) => {
+        return {
+          url: '/Tasks',
+          method: 'GET',
+          params: {
+            pageNumber: params.pageNumber || 1,
+            pageSize: params.pageSize || 10,
+            status: params.status,
+            assignedTo: params.assignedTo,
+          },
+        };
+      },
+      keepUnusedDataFor: 5,
       transformResponse: (response: ApiResponseWithData<TasksResponse>) =>
         response.data,
       providesTags: (result) =>
