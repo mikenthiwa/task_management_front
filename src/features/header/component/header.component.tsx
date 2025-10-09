@@ -7,7 +7,7 @@ export default function HeaderComponent() {
   const { status } = useSession();
 
   return (
-    <header className='flex items-center justify-between px-6 py-4 shadow-md bg-white'>
+    <header className='flex items-center justify-between px-6 py-4 shadow-md bg-white sticky top-0 z-10'>
       <Link href='/' className='text-xl font-bold'>
         Task Manager
       </Link>

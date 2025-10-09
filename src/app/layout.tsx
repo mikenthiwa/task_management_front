@@ -3,8 +3,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 
 import './globals.css';
 import { Providers } from '@/providers/providers';
-import { ToastContainer } from 'react-toastify';
-import HeaderComponent from '@/features/header/component/header.component';
 import { SessionProvider } from 'next-auth/react';
 
 const geistSans = Geist({
@@ -34,11 +32,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <SessionProvider>
-            <HeaderComponent />
-            <div className='container mx-auto px-4 pt-5'>
-              {children}
-              <ToastContainer position={'top-right'} autoClose={5000} />
-            </div>
+            <div>{children}</div>
           </SessionProvider>
         </body>
       </html>
