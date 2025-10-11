@@ -15,7 +15,6 @@ export function PaginationClient({
   const searchParams = useSearchParams();
 
   const handleChange = (_: any, value: number) => {
-    console.log('values', typeof value);
     const params = new URLSearchParams(searchParams);
     params.set('pageNumber', value.toString());
     router.push(`${pathname}?${params}`);

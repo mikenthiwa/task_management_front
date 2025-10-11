@@ -8,6 +8,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Brand scale */
+  --color-brand-900: #03045e;
+  --color-brand-700: #0077b6;
+  --color-brand-500: #00b4d8;
+  --color-brand-300: #90e0ef;
+  --color-brand-100: #caf0f8;
+
+  --border: #e5e7eb; /* light gray border for light theme */
+  --border-strong: #cbd5e1; /* slightly darker border if needed */
+  
 }
 
 @theme inline {
@@ -15,14 +26,28 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Tailwind custom color mapping */
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  /* Tailwind color names */
+  --color-brand-900: var(--color-brand-900);
+  --color-brand-700: var(--color-brand-700);
+  --color-brand-500: var(--color-brand-500);
+  --color-brand-300: var(--color-brand-300);
+  --color-brand-100: var(--color-brand-100);
+  
+  --color-primary: var(--color-brand-500);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --border: #262626;
+  --border-strong: #404040;
 }
+
 
 body {
   background: var(--background);

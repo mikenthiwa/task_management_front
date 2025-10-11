@@ -37,7 +37,7 @@ const TasksPage = async ({
             spacing={2}
             columns={{ xs: 4, sm: 8, md: 12, lg: 12 }}
           >
-            <TaskListComponent tasks={data!.items!} />
+            <TaskListComponent tasks={data.items!} />
           </Grid>
           <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>
             <PaginationClient
