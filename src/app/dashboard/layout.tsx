@@ -18,21 +18,20 @@ const geistMono = Geist_Mono({
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang='en'>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <HeaderComponent />
-        <Box className='h-screen flex overflow-hidden'>
-          <aside className='bg-gray-100 border-r border-gray-300 flex-shrink-0 w-[80px] md:min-w-[250px]'>
-            <SideBarComponent />
-          </aside>
-          <main className='flex-grow p-6 md:p-12 overflow-y-auto h-full'>
-            {children}
-          </main>
-        </Box>
-      </body>
-    </html>
+    <div
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      suppressHydrationWarning
+    >
+      <HeaderComponent />
+      <Box className='h-screen flex overflow-hidden'>
+        <aside className='border-border border-r flex-shrink-0 w-[80px] md:min-w-[250px]'>
+          <SideBarComponent />
+        </aside>
+        <main className='flex-grow p-6 md:p-12 overflow-y-auto h-full'>
+          {children}
+        </main>
+      </Box>
+    </div>
   );
 };
 

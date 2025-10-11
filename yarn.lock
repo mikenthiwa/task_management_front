@@ -144,7 +144,7 @@
 
 "@emotion/cache@^11.14.0":
   version "11.14.0"
-  resolved "https://registry.npmjs.org/@emotion/cache/-/cache-11.14.0.tgz"
+  resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-11.14.0.tgz#ee44b26986eeb93c8be82bb92f1f7a9b21b2ed76"
   integrity sha512-L/B1lc/TViYk4DcpGxtAVbx0ZyiKM5ktoIyafGkH6zg/tj+mA+NE//aPYKG0k8kCHSHVJrpLpcAlOBEXQ3SavA==
   dependencies:
     "@emotion/memoize" "^0.9.0"
@@ -506,6 +506,13 @@
   version "7.3.4"
   resolved "https://registry.yarnpkg.com/@mui/icons-material/-/icons-material-7.3.4.tgz#a273879765c369a1865a2eeb1240d71db3e6da19"
   integrity sha512-9n6Xcq7molXWYb680N2Qx+FRW8oT6j/LXF5PZFH3ph9X/Rct0B/BlLAsFI7iL9ySI6LVLuQIVtrLiPT82R7OZw==
+  dependencies:
+    "@babel/runtime" "^7.28.4"
+
+"@mui/material-nextjs@^7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@mui/material-nextjs/-/material-nextjs-7.3.3.tgz#562d2e53f24967344c662c29b442b71177cfa367"
+  integrity sha512-SHqEh/GIa/HkHzBMMGvTRCVSLvXYTATZ7QN7/QxngimW5kBDI+pWzjieS8HmLDgo36rxD8g+GcLY6Bu+pilciw==
   dependencies:
     "@babel/runtime" "^7.28.4"
 
@@ -2757,6 +2764,11 @@ next-redux-wrapper@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/next-redux-wrapper/-/next-redux-wrapper-8.1.0.tgz#d9c135f1ceeb2478375bdacd356eb9db273d3a07"
   integrity sha512-2hIau0hcI6uQszOtrvAFqgc0NkZegKYhBB7ZAKiG3jk7zfuQb4E7OV9jfxViqqojh3SEHdnFfPkN9KErttUKuw==
+
+next-themes@^0.4.6:
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/next-themes/-/next-themes-0.4.6.tgz#8d7e92d03b8fea6582892a50a928c9b23502e8b6"
+  integrity sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==
 
 next@15.5.2:
   version "15.5.2"
