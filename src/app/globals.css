@@ -4,7 +4,7 @@
 @import '@fontsource/roboto/500.css';
 @import '@fontsource/roboto/700.css';
 
-
+/* Runtime tokens (can be overridden by .dark) */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -16,41 +16,51 @@
   --color-brand-300: #90e0ef;
   --color-brand-100: #caf0f8;
 
-  --border: #e5e7eb; /* light gray border for light theme */
-  --border-strong: #cbd5e1; /* slightly darker border if needed */
-  
+  --color-error: #ff4d4f;
+
+  /* Neutral scale */
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-400: #cbd5e1;
 }
 
-@theme inline {
+/* Dark mode overrides (class strategy) */
+:root.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  /* optional darker neutrals in dark */
+  --color-neutral-200: #262626;
+  --color-neutral-400: #404040;
+}
+
+/* Map tokens → Tailwind utilities (dynamic, NOT inlined) */
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* Tailwind custom color mapping */
-  --color-border: var(--border);
-  --color-border-strong: var(--border-strong);
-
-  /* Tailwind color names */
+  /* Expose brand scale as utilities (e.g., bg-brand-500) */
   --color-brand-900: var(--color-brand-900);
   --color-brand-700: var(--color-brand-700);
   --color-brand-500: var(--color-brand-500);
   --color-brand-300: var(--color-brand-300);
   --color-brand-100: var(--color-brand-100);
-  
+
+  /* Neutrals + semantics */
+  --color-neutral-200: var(--color-neutral-200);
+  --color-neutral-400: var(--color-neutral-400);
+
   --color-primary: var(--color-brand-500);
+  --color-primary-strong: var(--color-brand-700);
+  --color-neutral: var(--color-neutral-200);
+  --color-neutral-strong: var(--color-neutral-400);
+  --color-error: var(--color-error);
 }
 
-:root.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --border: #262626;
-  --border-strong: #404040;
-}
-
-
+/* Base page styling */
 body {
   background: var(--background);
   color: var(--foreground);
-  /*font-family: Arial, Helvetica, sans-serif;*/
 }
