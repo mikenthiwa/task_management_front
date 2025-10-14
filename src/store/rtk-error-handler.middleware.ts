@@ -1,7 +1,7 @@
 import { isRejectedWithValue, Middleware } from '@reduxjs/toolkit';
 import { extractApiErrorMessage } from '@/core/common/errors';
 import { ErrorResponse } from '@/core/common/interfaces/ApiResponse';
-import { setError } from '@/core/common/Error/error-slice';
+import { setError } from '@/features/Error/error-slice';
 
 interface Payload {
   data: ErrorResponse;
