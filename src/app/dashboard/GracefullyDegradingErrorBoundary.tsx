@@ -1,6 +1,12 @@
 'use client';
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, {
+  Component,
+  ErrorInfo,
+  ReactNode,
+  createContext,
+  useContext,
+} from 'react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -9,24 +15,46 @@ interface ErrorBoundaryProps {
 
 interface ErrorBoundaryState {
   hasError: boolean;
+  errorMessage: string | null;
+  errorType: string | null;
 }
+
+interface ErrorBoundaryContextValue {
+  hasError: boolean;
+  errorMessage: string | null;
+  errorType: string | null;
+  resetError: () => void;
+}
+
+export const GRACEFULLY_DEGRADING_ERROR_NAME =
+  'GracefullyDegradingBoundaryError';
+
+export const GracefullyDegradingErrorBoundaryContext =
+  createContext<ErrorBoundaryContextValue>({
+    hasError: false,
+    errorMessage: null,
+    errorType: null,
+    resetError: () => undefined,
+  });
+
+export const useGracefullyDegradingErrorBoundary = () =>
+  useContext(GracefullyDegradingErrorBoundaryContext);
 
 export class GracefullyDegradingErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
-  private contentRef: React.RefObject<HTMLDivElement | null>;
-
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false };
-
-    this.contentRef = React.createRef();
+    this.state = { hasError: false, errorMessage: null, errorType: null };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  static getDerivedStateFromError(_: Error): ErrorBoundaryState {
-    return { hasError: true };
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return {
+      hasError: true,
+      errorMessage: error.message,
+      errorType: error.name ?? null,
+    };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -35,26 +63,36 @@ export class GracefullyDegradingErrorBoundary extends Component<
     }
   }
 
-  render() {
-    if (this.state.hasError) {
-      // Render the current HTML content without hydration
-      return (
-        <>
-          <div
-            ref={this.contentRef}
-            suppressHydrationWarning
-            dangerouslySetInnerHTML={{
-              __html: this.contentRef.current?.innerHTML || '',
-            }}
-          />
-          <div className='fixed bottom-0 left-0 right-0 bg-error text-foreground py-4 px-6 text-center'>
-            <p className='font-semibold'>An error occurred</p>
-          </div>
-        </>
-      );
-    }
+  private resetError = () => {
+    this.setState({ hasError: false, errorMessage: null, errorType: null });
+  };
 
-    return <div ref={this.contentRef}>{this.props.children}</div>;
+  render() {
+    const { hasError, errorMessage, errorType } = this.state;
+    const message = errorMessage || 'An error occurred';
+    const shouldRenderChildren =
+      !hasError || errorType === GRACEFULLY_DEGRADING_ERROR_NAME;
+
+    return (
+      <GracefullyDegradingErrorBoundaryContext.Provider
+        value={{
+          hasError,
+          errorMessage,
+          errorType,
+          resetError: this.resetError,
+        }}
+      >
+        {shouldRenderChildren && this.props.children}
+        {hasError && (
+          <div
+            role='alert'
+            className='fixed bottom-0 left-0 right-0 bg-error text-foreground py-4 px-6 text-center shadow-lg'
+          >
+            <p className='font-semibold'>{message}</p>
+          </div>
+        )}
+      </GracefullyDegradingErrorBoundaryContext.Provider>
+    );
   }
 }
 
