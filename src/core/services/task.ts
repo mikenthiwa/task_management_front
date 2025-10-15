@@ -1,6 +1,9 @@
 import { api } from '@/core/services/api';
 import { Task } from '@/core/common/interfaces/task';
-import { ApiResponseWithData } from '@/core/common/interfaces/ApiResponse';
+import {
+  ApiResponse,
+  ApiResponseWithData,
+} from '@/core/common/interfaces/ApiResponse';
 
 interface GetTasksQuery {
   pageNumber?: number;
@@ -15,6 +18,11 @@ interface TasksResponse {
   count: number;
   totalPage: number;
   items: Task[];
+}
+
+interface AddTaskRequest {
+  title: string;
+  description?: string;
 }
 
 export const taskAPI = api.injectEndpoints({
@@ -43,10 +51,19 @@ export const taskAPI = api.injectEndpoints({
             ]
           : [{ type: 'Tasks' as const, id: 'LIST' }],
     }),
+    addTask: build.mutation<ApiResponse, AddTaskRequest>({
+      query: (payload) => ({
+        url: '/Tasks',
+        method: 'POST',
+        body: payload,
+      }),
+      transformResponse: (response: ApiResponse) => response,
+      invalidatesTags: [{ type: 'Tasks', id: 'LIST' }],
+    }),
   }),
 });
 
-export const { useGetTasksQuery } = taskAPI;
+export const { useGetTasksQuery, useAddTaskMutation } = taskAPI;
 export const {
-  endpoints: { getTasks },
+  endpoints: { getTasks, addTask },
 } = taskAPI;

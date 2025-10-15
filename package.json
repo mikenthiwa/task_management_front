@@ -16,6 +16,7 @@
     "@emotion/styled": "^11.14.1",
     "@fontsource/roboto": "^5.2.8",
     "@mui/icons-material": "^7.3.4",
+    "@mui/lab": "^7.0.1-beta.18",
     "@mui/material": "^7.3.4",
     "@mui/material-nextjs": "^7.3.3",
     "@reduxjs/toolkit": "^2.9.0",
@@ -31,7 +32,7 @@
     "react-toastify": "^11.0.5",
     "redux-persist": "^6.0.0",
     "yup": "^1.7.0",
-    "zod": "^4.1.9"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
+import { Button } from '@mui/material';
 
 export default function HeaderComponent() {
   const { status } = useSession();
@@ -13,12 +14,13 @@ export default function HeaderComponent() {
       </Link>
 
       {status === 'authenticated' ? (
-        <button
+        <Button
+          variant='contained'
           onClick={() => signOut()}
-          className='rounded bg-primary px-4 py-2 ext-foreground hover:bg-red-600'
+          className='bg-primary'
         >
           Logout
-        </button>
+        </Button>
       ) : null}
     </header>
   );

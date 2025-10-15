@@ -5,6 +5,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { CustomInfoMessage } from '@/ui/custom-info-message';
 import { TaskListComponent } from '@/features/tasks/components/task-list.component';
 import { PaginationClient } from '@/features/tasks/components/pagination-client.component';
+import { TaskModalComponent } from '@/features/tasks/components/task-modal.component';
 
 const TasksPage = async ({
   searchParams,
@@ -17,10 +18,9 @@ const TasksPage = async ({
   const promise = store.dispatch(
     taskAPI.endpoints.getTasks.initiate({ pageNumber })
   );
-
   const { data } = await promise;
 
-  if (!data) return;
+  if (!data) return <CustomInfoMessage message='Failed to load tasks' />;
 
   return (
     <Box>
@@ -28,6 +28,9 @@ const TasksPage = async ({
         <Typography variant='h5' fontWeight={700}>
           All Tasks
         </Typography>
+        <Box>
+          <TaskModalComponent />
+        </Box>
       </Box>
       {data.count === 0 && <CustomInfoMessage message='No tasks available' />}
       {data.count > 0 && (
