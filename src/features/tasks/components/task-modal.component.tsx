@@ -79,6 +79,7 @@ export const TaskModalComponent = () => {
         className='bg-primary'
         onClick={handleOpen}
         data-testid='open-create-task-button'
+        size='small'
       >
         Create Task
       </Button>
@@ -102,6 +103,7 @@ export const TaskModalComponent = () => {
             <TextField
               name='title'
               label='Task Title'
+              size='small'
               fullWidth
               margin='normal'
               value={formData['title']}
@@ -114,6 +116,7 @@ export const TaskModalComponent = () => {
               label='Task Description'
               fullWidth
               margin='normal'
+              size='small'
               value={formData['description']}
               onChange={handleChange}
               error={!!errors['description']}
@@ -128,6 +131,7 @@ export const TaskModalComponent = () => {
             onClick={handleClose}
             data-testid='close-create-task-button'
             variant='outlined'
+            size='small'
           >
             Cancel
           </Button>
@@ -137,6 +141,7 @@ export const TaskModalComponent = () => {
             variant='contained'
             disabled={!isFormValid}
             loading={isLoading}
+            size='small'
           >
             Submit
           </LoadingButton>
