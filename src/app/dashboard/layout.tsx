@@ -4,8 +4,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import HeaderComponent from '@/features/header/component/header.component';
 import { Box } from '@mui/material';
 import { SideBarComponent } from '@/features/side-bar/components/side-bar.component';
-import { ErrorThrowerComponent } from '@/features/Error/error-thrower.component';
-import GracefullyDegradingErrorBoundary from '@/app/dashboard/GracefullyDegradingErrorBoundary';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,10 +28,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           <SideBarComponent />
         </aside>
         <main className='flex-grow p-6 md:p-12 overflow-y-auto h-full'>
-          <GracefullyDegradingErrorBoundary>
-            <ErrorThrowerComponent />
-            {children}
-          </GracefullyDegradingErrorBoundary>
+          {children}
         </main>
       </Box>
     </div>

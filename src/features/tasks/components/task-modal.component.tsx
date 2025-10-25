@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import * as zod from 'zod';
 
 import { LoadingButton } from '@mui/lab';
@@ -31,7 +31,7 @@ export const TaskModalComponent = () => {
   const [addTask, { isLoading }] = useAddTaskMutation();
   const router = useRouter();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,

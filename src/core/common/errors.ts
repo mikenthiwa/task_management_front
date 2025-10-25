@@ -1,7 +1,7 @@
 import { ErrorResponse } from '@/core/common/interfaces/ApiResponse';
 
 export function extractApiErrorMessage(error: ErrorResponse): string {
-  if (!error) return 'Request failed';
+  if (!error) return 'An error occurred!';
 
   if (error.errors && typeof error.errors === 'object') {
     const firstKey = Object.keys(error.errors)[0];
