@@ -6,6 +6,7 @@ import { CustomInfoMessage } from '@/ui/custom-info-message';
 import { TaskListComponent } from '@/features/tasks/components/task-list.component';
 import { PaginationClient } from '@/features/tasks/components/pagination-client.component';
 import { TaskModalComponent } from '@/features/tasks/components/task-modal.component';
+import { userApi } from '@/core/services/users';
 
 const TasksPage = async ({
   searchParams,
@@ -15,12 +16,13 @@ const TasksPage = async ({
   const store = createStore();
 
   const pageNumber = Number((await searchParams).pageNumber ?? 1);
-  const promise = store.dispatch(
-    taskAPI.endpoints.getTasks.initiate({ pageNumber })
-  );
-  const { data } = await promise;
 
-  if (!data) return <CustomInfoMessage message='Failed to load tasks' />;
+  const [taskResult, userResult] = await Promise.all([
+    store
+      .dispatch(taskAPI.endpoints.getTasks.initiate({ pageNumber }))
+      .unwrap(),
+    store.dispatch(userApi.endpoints.getUsers.initiate()).unwrap(),
+  ]);
 
   return (
     <Box>
@@ -32,19 +34,21 @@ const TasksPage = async ({
           <TaskModalComponent />
         </Box>
       </Box>
-      {data.count === 0 && <CustomInfoMessage message='No tasks available' />}
-      {data.count > 0 && (
+      {taskResult.count === 0 && (
+        <CustomInfoMessage message='No tasks available' />
+      )}
+      {taskResult.count > 0 && (
         <Box>
           <Grid
             container
             spacing={2}
             columns={{ xs: 4, sm: 8, md: 12, lg: 12 }}
           >
-            <TaskListComponent tasks={data.items!} />
+            <TaskListComponent tasks={taskResult.items} users={userResult} />
           </Grid>
           <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>
             <PaginationClient
-              count={Math.ceil(data!.count / 10)}
+              count={Math.ceil(taskResult.count / 10)}
               page={pageNumber}
             />
           </Box>
