@@ -44,6 +44,6 @@ export const api = createApi({
   // reducerPath: 'api',
   baseQuery: baseQuery,
   extractRehydrationInfo,
-  tagTypes: ['Tasks'],
+  tagTypes: ['Tasks', 'Users'],
   endpoints: () => ({}),
 });

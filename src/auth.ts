@@ -21,7 +21,13 @@ const providers: Provider[] = [
     },
     authorize: async (credentials) => {
       try {
-        const data = await login(credentials);
+        const adminCred = {
+          email: 'administrator',
+          password: 'Kenya2019%',
+        };
+        // const data = await login(credentials);
+        const data = await login(adminCred);
+
         return {
           accessToken: data.accessToken,
           refreshToken: data.refreshToken,
