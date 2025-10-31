@@ -57,6 +57,12 @@ Task Management Frontend is a Next.js 15 application that powers the web UI for 
 - Unauthenticated visitors are redirected to `/api/auth/signin`; on successful login they return to `/dashboard/tasks`.
 - API calls automatically attach the bearer token pulled from the NextAuth session both on the server (via `auth()`) and on the client (via `getSession()`).
 
+## Test Admin Credentials
+- Email: `administrator@localhost.com`
+- Password: `Kenya2019%`
+
+These credentials are intended for local development and manual QA of admin-level features. Do not use them in production environments.
+
 ## Project Structure Highlights
 - `src/app` – Next.js App Router pages, including the `/dashboard/tasks` route.
 - `src/features` – UI components and feature-specific logic (task list, modals, user selector).
