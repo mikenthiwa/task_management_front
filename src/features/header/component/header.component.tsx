@@ -18,6 +18,7 @@ export default function HeaderComponent() {
           variant='contained'
           onClick={() => signOut()}
           className='bg-primary'
+          size='small'
         >
           Logout
         </Button>
