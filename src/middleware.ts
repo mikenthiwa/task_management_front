@@ -5,7 +5,7 @@ export default auth((req) => {
   if (req.auth) return NextResponse.next();
 
   const signInUrl = new URL('/api/auth/signin', req.nextUrl.origin);
-  signInUrl.searchParams.set('callbackUrl', '/');
+  signInUrl.searchParams.set('callbackUrl', '/dashboard/tasks');
   return NextResponse.redirect(signInUrl);
 });
 
