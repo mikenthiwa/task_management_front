@@ -21,12 +21,7 @@ const providers: Provider[] = [
     },
     authorize: async (credentials) => {
       try {
-        // const adminCred = {
-        //   email: 'administrator',
-        //   password: 'Kenya2019%',
-        // };
         const data = await login(credentials);
-        // const data = await login(adminCred);
 
         return {
           accessToken: data.accessToken,
@@ -34,7 +29,8 @@ const providers: Provider[] = [
           tokenType: data.tokenType,
           expiresIn: data.expiresIn,
         };
-      } catch (e) {
+      } catch (error) {
+        console.log('error', error);
         return null;
       }
     },

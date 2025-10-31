@@ -1,4 +1,3 @@
-// src/app/PaginationClient.tsx
 'use client';
 import { Pagination } from '@mui/material';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -14,7 +13,7 @@ export function PaginationClient({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const handleChange = (_: any, value: number) => {
+  const handleChange = (_: unknown, value: number) => {
     const params = new URLSearchParams(searchParams);
     params.set('pageNumber', value.toString());
     router.push(`${pathname}?${params}`);
