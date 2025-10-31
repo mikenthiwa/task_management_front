@@ -12,7 +12,7 @@ interface TabPanelProps {
 }
 
 export const TabPanelComponent = (props: TabPanelProps) => {
-  const { children, index, value, title, subtitle, ...other } = props;
+  const { children, index, value, subtitle, ...other } = props;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
