@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task Management Frontend
+
+Task Management Frontend is a Next.js 15 application that powers the web UI for the Task Management platform. It delivers a responsive Material UI experience, authenticates users with NextAuth credentials, talks to the backend through RTK Query, and redirects authenticated users to the task dashboard.
+
+## Features
+- Email/password sign-in via NextAuth Credentials, including automatic token refresh.
+- Auth-guarded dashboard that redirects successful logins to `/dashboard/tasks`.
+- Task listing with server-side pagination, assignment controls, and Material UI cards.
+- Task creation modal with client-side validation powered by Zod schemas.
+- Toast notifications for API errors and success states.
+- Hybrid styling using Material UI components and Tailwind utility classes.
+
+## Tech Stack
+- Next.js 15 (App Router, server actions, middleware)
+- React 19 + TypeScript
+- NextAuth 5 (credentials provider)
+- Redux Toolkit Query + Redux middleware
+- Material UI 7 and MUI Lab
+- Zod, React Toastify, Tailwind CSS
+
+## Prerequisites
+- Node.js 18.18 or newer
+- Yarn (the project uses a `yarn.lock`)
+- Backend API that exposes the task and user endpoints consumed by the frontend
 
 ## Getting Started
+1. Clone the repository  
+   ```bash
+   git clone https://github.com/mikenthiwa/task_management_front.git
+   cd task_management_front
+   ```
+2. Install dependencies  
+   ```bash
+   yarn install
+   ```
+3. Create an `.env.local` file at the project root and configure the API endpoint:
+   ```bash
+   NEXT_PUBLIC_API_BASE_URL=http://localhost:5230/api
+   ```
+   Adjust the URL to point at your Task Management backend.
+4. Run the development server  
+   ```bash
+   yarn dev
+   ```
+   The app is served at `http://localhost:3000`.
 
-First, run the development server:
+## NPM Scripts
+- `yarn dev` – Start the development server with Turbopack.
+- `yarn build` – Produce a production build.
+- `yarn start` – Serve the production build.
+- `yarn lint` – Run ESLint.
+- `yarn format-write` – Format the codebase with Prettier (in-place).
+- `yarn format-test` – Check formatting without writing changes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Authentication Flow
+- All non-static routes are protected by `src/middleware.ts`.
+- Unauthenticated visitors are redirected to `/api/auth/signin`; on successful login they return to `/dashboard/tasks`.
+- API calls automatically attach the bearer token pulled from the NextAuth session both on the server (via `auth()`) and on the client (via `getSession()`).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Structure Highlights
+- `src/app` – Next.js App Router pages, including the `/dashboard/tasks` route.
+- `src/features` – UI components and feature-specific logic (task list, modals, user selector).
+- `src/core/services` – RTK Query endpoints for tasks and users, plus token refresh helpers.
+- `src/store` – Redux store configuration and error handling middleware.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Contributing
+1. Create a feature branch.
+2. Implement your changes with appropriate validation.
+3. Run `yarn lint` and `yarn format-test` to ensure consistency.
+4. Open a PR describing your changes and how to verify them manually.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+This project is distributed under the terms defined by the repository owner. Please refer to the main project documentation for licensing details.
