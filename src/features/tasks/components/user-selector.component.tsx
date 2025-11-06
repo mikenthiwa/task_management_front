@@ -23,7 +23,7 @@ export const UserSelectorComponent = ({
   const [selectedUserId, setSelectedUserId] = useState<string>(
     assignedUserId ?? ''
   );
-  const [assignTask] = useAssignTaskMutation();
+  const [assignTask, { isLoading }] = useAssignTaskMutation();
 
   const handleChange = async (event: SelectChangeEvent<string>) => {
     const result = await assignTask({
@@ -45,6 +45,7 @@ export const UserSelectorComponent = ({
         label='Assigned user'
         onChange={handleChange}
         size='small'
+        disabled={isLoading}
       >
         {users.map((user: IUser) => (
           <MenuItem key={user.id} value={user.id}>
