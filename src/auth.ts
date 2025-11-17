@@ -1,11 +1,36 @@
 import NextAuth, { User, Session } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
+
 import { JWT } from 'next-auth/jwt';
 import type { Provider } from 'next-auth/providers';
 import { refreshAccessToken, RefreshTokenError } from '@/core/server/refresh';
-import { login } from '@/core/server/login';
+import { login, socialLogin } from '@/core/server/login';
+import { Token } from '@/core/common/interfaces/token';
 
 const providers: Provider[] = [
+  GoogleProvider({
+    clientId: process.env.GOOGLE_CLIENT_ID as string,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    profile: async (profile): Promise<Token> => {
+      const { email, name } = profile;
+      const username =
+        name?.replace(/\s+/g, '').toLowerCase() || email.split('@')[0];
+      try {
+        const data = await socialLogin({ username, email });
+        console.log('Refresh token data', data.refreshToken);
+        return {
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+          tokenType: data.tokenType,
+          expiresIn: data.expiresIn,
+        };
+      } catch (error) {
+        console.log('error', error);
+        return null as unknown as Token;
+      }
+    },
+  }),
   Credentials({
     credentials: {
       email: {
@@ -22,7 +47,6 @@ const providers: Provider[] = [
     authorize: async (credentials) => {
       try {
         const data = await login(credentials);
-
         return {
           accessToken: data.accessToken,
           refreshToken: data.refreshToken,
@@ -37,26 +61,32 @@ const providers: Provider[] = [
   }),
 ];
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { handlers, auth } = NextAuth({
   providers,
+  pages: {
+    error: '/auth/error',
+  },
   callbacks: {
     async jwt({ token, user }: { token: JWT; user: User }) {
       if (user) {
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
         token.tokenType = user.tokenType;
-        token.expiresAt = Date.now() + user.expiresIn * 1000;
+        token.expiresAt = Date.now() + user.expiresIn * 60 * 1000;
       }
-      if (!token.expiresAt || !token.refreshToken) return token;
-
-      if (Date.now() < (token.expiresAt as number) - 60000) return token;
+      if (!token.expiresAt || !token.refreshToken) {
+        return token;
+      }
+      if (Date.now() < (token.expiresAt as number) - 60000) {
+        return token;
+      }
 
       try {
         const res = await refreshAccessToken(token.refreshToken as string);
         token.accessToken = res.accessToken;
         token.refreshToken = res.refreshToken;
         token.tokenType = res.tokenType;
-        token.expiresAt = res.accessTokenExpiresAt;
+        token.expiresAt = Date.now() + res.expiresIn * 60 * 1000;
       } catch (err) {
         const e = err as unknown;
         token.refreshError =
