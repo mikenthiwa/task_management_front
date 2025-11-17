@@ -1,5 +1,6 @@
 // import 'server-only';
 import { Token } from '@/core/common/interfaces/token';
+import { ApiResponseWithData } from '@/core/common/interfaces/ApiResponse';
 
 export class RefreshTokenError extends Error {
   constructor(
@@ -11,21 +12,21 @@ export class RefreshTokenError extends Error {
   }
 }
 
-export async function refreshAccessToken(refreshToken: string): Promise<{
+export async function refreshAccessToken(payload: string): Promise<{
   accessToken: string;
   refreshToken: string;
   tokenType: string;
-  accessTokenExpiresAt: number; // epoch ms
+  expiresIn: number; // epoch ms
 }> {
   const resp = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/refresh`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh-token`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      body: JSON.stringify({ refreshToken }),
+      body: JSON.stringify({ refreshToken: payload }),
       cache: 'no-store',
     }
   );
@@ -34,15 +35,17 @@ export async function refreshAccessToken(refreshToken: string): Promise<{
     throw new RefreshTokenError('Refresh call failed', resp.status);
   }
 
-  const data = (await resp.json()) as Token;
-  if (!data?.accessToken || !data?.expiresIn) {
+  const result: ApiResponseWithData<Token> = await resp.json();
+  const { tokenType, accessToken, refreshToken, expiresIn } = result.data;
+
+  if (!accessToken || !expiresIn) {
     throw new RefreshTokenError('Invalid refresh payload');
   }
 
   return {
-    accessToken: data.accessToken,
-    refreshToken: data.refreshToken,
-    tokenType: data.tokenType,
-    accessTokenExpiresAt: Date.now() + data.expiresIn * 1000,
+    accessToken,
+    refreshToken,
+    tokenType,
+    expiresIn,
   };
 }
