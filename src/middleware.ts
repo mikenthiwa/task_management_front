@@ -2,11 +2,18 @@ import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 
 export default auth((req) => {
-  if (req.auth) return NextResponse.next();
+  const { pathname } = req.nextUrl;
+  const protectedPaths = [
+    '/dashboard',
+    '/dashboard/tasks',
+    '/dashboard/settings',
+  ];
 
-  const signInUrl = new URL('/api/auth/signin', req.nextUrl.origin);
-  signInUrl.searchParams.set('callbackUrl', '/dashboard/tasks');
-  return NextResponse.redirect(signInUrl);
+  if (protectedPaths.includes(pathname) && !req.auth) {
+    const signInUrl = new URL('/api/auth/signin', req.nextUrl.origin);
+    return NextResponse.redirect(signInUrl);
+  }
+  return NextResponse.next();
 });
 
 export const config = {
