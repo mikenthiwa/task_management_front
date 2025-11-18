@@ -1,11 +1,10 @@
 import NextAuth, { User, Session } from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 
 import { JWT } from 'next-auth/jwt';
 import type { Provider } from 'next-auth/providers';
 import { refreshAccessToken, RefreshTokenError } from '@/core/server/refresh';
-import { login, socialLogin } from '@/core/server/login';
+import { socialLogin } from '@/core/server/login';
 import { Token } from '@/core/common/interfaces/token';
 
 const providers: Provider[] = [
@@ -18,7 +17,6 @@ const providers: Provider[] = [
         name?.replace(/\s+/g, '').toLowerCase() || email.split('@')[0];
       try {
         const data = await socialLogin({ username, email });
-        console.log('Refresh token data', data.refreshToken);
         return {
           accessToken: data.accessToken,
           refreshToken: data.refreshToken,
@@ -31,34 +29,34 @@ const providers: Provider[] = [
       }
     },
   }),
-  Credentials({
-    credentials: {
-      email: {
-        type: 'email',
-        label: 'Email',
-        placeholder: 'johndoe@gmail.com',
-      },
-      password: {
-        type: 'password',
-        label: 'Password',
-        placeholder: '*****',
-      },
-    },
-    authorize: async (credentials) => {
-      try {
-        const data = await login(credentials);
-        return {
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-          tokenType: data.tokenType,
-          expiresIn: data.expiresIn,
-        };
-      } catch (error) {
-        console.log('error', error);
-        return null;
-      }
-    },
-  }),
+  // Credentials({
+  //   credentials: {
+  //     email: {
+  //       type: 'email',
+  //       label: 'Email',
+  //       placeholder: 'johndoe@gmail.com',
+  //     },
+  //     password: {
+  //       type: 'password',
+  //       label: 'Password',
+  //       placeholder: '*****',
+  //     },
+  //   },
+  //   authorize: async (credentials) => {
+  //     try {
+  //       const data = await login(credentials);
+  //       return {
+  //         accessToken: data.accessToken,
+  //         refreshToken: data.refreshToken,
+  //         tokenType: data.tokenType,
+  //         expiresIn: data.expiresIn,
+  //       };
+  //     } catch (error) {
+  //       console.log('error', error);
+  //       return null;
+  //     }
+  //   },
+  // }),
 ];
 
 export const { handlers, auth } = NextAuth({
