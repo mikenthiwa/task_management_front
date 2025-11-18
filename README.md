@@ -1,10 +1,11 @@
 # Task Management Frontend
 
-Task Management Frontend is a Next.js 15 application that powers the web UI for the Task Management platform. It delivers a responsive Material UI experience, authenticates users with NextAuth credentials, talks to the backend through RTK Query, and redirects authenticated users to the task dashboard.
+Task Management Frontend is a Next.js 15 application that powers the web UI for the Task Management platform. It delivers a responsive Material UI experience, authenticates users with Google OAuth via NextAuth, talks to the backend through RTK Query, and redirects authenticated users to the task dashboard.  
+Live demo: https://task-management-front-two.vercel.app/
 
 ## Features
 
-- Email/password sign-in via NextAuth Credentials, including automatic token refresh.
+- Google OAuth sign-in via NextAuth, including automatic token refresh.
 - Auth-guarded dashboard that redirects successful logins to `/dashboard/tasks`.
 - Task listing with server-side pagination, assignment controls, and Material UI cards.
 - Task creation modal with client-side validation powered by Zod schemas.
@@ -15,7 +16,7 @@ Task Management Frontend is a Next.js 15 application that powers the web UI for 
 
 - Next.js 15 (App Router, server actions, middleware)
 - React 19 + TypeScript
-- NextAuth 5 (credentials provider)
+- NextAuth 5 (Google provider)
 - Redux Toolkit Query + Redux middleware
 - Material UI 7 and MUI Lab
 - Zod, React Toastify, Tailwind CSS
@@ -37,9 +38,11 @@ Task Management Frontend is a Next.js 15 application that powers the web UI for 
    ```bash
    yarn install
    ```
-3. Create an `.env.local` file at the project root and configure the API endpoint:
+3. Create an `.env.local` file at the project root and configure the API endpoint plus your Google OAuth credentials:
    ```bash
    NEXT_PUBLIC_API_BASE_URL=http://localhost:5230/api
+   GOOGLE_CLIENT_ID=your-google-client-id
+   GOOGLE_CLIENT_SECRET=your-google-client-secret
    ```
    Adjust the URL to point at your Task Management backend.
 4. Run the development server
@@ -60,15 +63,8 @@ Task Management Frontend is a Next.js 15 application that powers the web UI for 
 ## Authentication Flow
 
 - All non-static routes are protected by `src/middleware.ts`.
-- Unauthenticated visitors are redirected to `/api/auth/signin`; on successful login they return to `/dashboard/tasks`.
+- Unauthenticated visitors are redirected to `/api/auth/signin`; on successful Google login they return to `/dashboard/tasks`.
 - API calls automatically attach the bearer token pulled from the NextAuth session both on the server (via `auth()`) and on the client (via `getSession()`).
-
-## Test Admin Credentials
-
-- Email: `administrator@localhost.com`
-- Password: `Kenya2019%`
-
-These credentials are intended for local development and manual QA of admin-level features. Do not use them in production environments.
 
 ## Project Structure Highlights
 
