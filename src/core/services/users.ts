@@ -27,7 +27,7 @@ export const userApi = api.injectEndpoints({
     }),
     getUsers: build.query<IUser[], void>({
       query: () => ({
-        url: '/Users/users',
+        url: '/users',
         method: 'GET',
       }),
       transformResponse: (response: ApiResponseWithData<IUser[]>) =>

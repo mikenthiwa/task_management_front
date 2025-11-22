@@ -3,6 +3,10 @@ import { NextResponse } from 'next/server';
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
+  if (pathname === '/') {
+    const target = new URL('/dashboard/tasks', req.nextUrl.origin);
+    return NextResponse.redirect(target);
+  }
   const protectedPaths = [
     '/dashboard',
     '/dashboard/tasks',
