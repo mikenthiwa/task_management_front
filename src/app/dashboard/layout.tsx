@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
