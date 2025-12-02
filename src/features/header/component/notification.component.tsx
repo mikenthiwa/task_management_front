@@ -1,7 +1,7 @@
 'use client';
 import { MouseEvent } from 'react';
 import { useMemo, useState } from 'react';
-import { format, formatDate } from 'date-fns';
+import { format } from 'date-fns';
 import {
   Badge,
   IconButton,
@@ -18,7 +18,7 @@ import {
 } from '@/core/services/notification';
 
 export const NotificationComponent = ({ userId }: { userId: string }) => {
-  const { data, error, isLoading, isSuccess } = useGetNotificationsQuery({
+  const { data } = useGetNotificationsQuery({
     pageNumber: 1,
     pageSize: 5,
     userId,
@@ -41,9 +41,7 @@ export const NotificationComponent = ({ userId }: { userId: string }) => {
 
   const handleClose = () => setAnchorEl(null);
 
-  // Helper to format date safely (simple version)
   const formatDate = (dateString: string) => {
-    // In a real app, consider using date-fns or a custom hook to handle hydration
     return format(new Date(dateString), 'dd MMM yyyy HH:mm');
   };
 
