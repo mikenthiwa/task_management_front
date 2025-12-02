@@ -114,7 +114,7 @@ export const { handlers, auth } = NextAuth({
   },
 });
 
-function safeDecodeJwt<T = any>(jwt: string): T | null {
+function safeDecodeJwt<T = string>(jwt: string): T | null {
   try {
     const [, payload] = jwt.split('.');
     if (!payload) return null;
