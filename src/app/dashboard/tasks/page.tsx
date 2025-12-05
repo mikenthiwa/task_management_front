@@ -7,22 +7,25 @@ import { TaskListComponent } from '@/features/tasks/components/task-list.compone
 import { PaginationClient } from '@/features/tasks/components/pagination-client.component';
 import { TaskModalComponent } from '@/features/tasks/components/task-modal.component';
 import { userApi } from '@/core/services/users';
+import { TaskViewComponent } from '@/features/tasks/components/task-view.component';
+import { Suspense } from 'react';
+import Loading from '@/app/dashboard/tasks/loading';
 
 const TasksPage = async ({
   searchParams,
 }: {
   searchParams: Promise<{ pageNumber: number }>;
 }) => {
-  const store = createStore();
-
-  const pageNumber = Number((await searchParams).pageNumber ?? 1);
-
-  const [taskResult, userResult] = await Promise.all([
-    store
-      .dispatch(taskAPI.endpoints.getTasks.initiate({ pageNumber }))
-      .unwrap(),
-    store.dispatch(userApi.endpoints.getUsers.initiate()).unwrap(),
-  ]);
+  // const store = createStore();
+  //
+  // const pageNumber = Number((await searchParams).pageNumber ?? 1);
+  //
+  // const [taskResult, userResult] = await Promise.all([
+  //   store
+  //     .dispatch(taskAPI.endpoints.getTasks.initiate({ pageNumber }))
+  //     .unwrap(),
+  //   store.dispatch(userApi.endpoints.getUsers.initiate()).unwrap(),
+  // ]);
 
   return (
     <Box>
@@ -34,26 +37,33 @@ const TasksPage = async ({
           <TaskModalComponent />
         </Box>
       </Box>
-      {taskResult.count === 0 && (
-        <CustomInfoMessage message='No tasks available' />
-      )}
-      {taskResult.count > 0 && (
-        <Box>
-          <Grid
-            container
-            spacing={2}
-            columns={{ xs: 4, sm: 8, md: 12, lg: 12 }}
-          >
-            <TaskListComponent tasks={taskResult.items} users={userResult} />
-          </Grid>
-          <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>
-            <PaginationClient
-              count={Math.ceil(taskResult.count / 10)}
-              page={pageNumber}
-            />
-          </Box>
-        </Box>
-      )}
+
+      {/*{taskResult.count === 0 && (*/}
+      {/*  <CustomInfoMessage message='No tasks available' />*/}
+      {/*)}*/}
+      {/*{taskResult.count > 0 && (*/}
+      {/*  <Box>*/}
+      {/*    <Grid*/}
+      {/*      container*/}
+      {/*      spacing={2}*/}
+      {/*      columns={{ xs: 4, sm: 8, md: 12, lg: 12 }}*/}
+      {/*    >*/}
+      {/*      <TaskListComponent tasks={taskResult.items} users={userResult} />*/}
+      {/*    </Grid>*/}
+      {/*    <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>*/}
+      {/*      <PaginationClient*/}
+      {/*        count={Math.ceil(taskResult.count / 10)}*/}
+      {/*        page={pageNumber}*/}
+      {/*      />*/}
+      {/*    </Box>*/}
+      {/*  </Box>*/}
+      {/*)}*/}
+
+      <Box>
+        <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12, lg: 12 }}>
+          <TaskViewComponent />
+        </Grid>
+      </Box>
     </Box>
   );
 };
