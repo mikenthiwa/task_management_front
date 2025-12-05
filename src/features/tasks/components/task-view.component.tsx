@@ -1,25 +1,21 @@
 'use client';
 
 import { useGetTasksQuery } from '@/core/services/task';
-import { useState } from 'react';
-import { useGetUsersQuery } from '@/core/services/users';
 import { TaskListComponent } from '@/features/tasks/components/task-list.component';
 import Loading from '@/app/dashboard/tasks/loading';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
+import { IUser } from '@/core/common/interfaces/user';
+import { PaginationClient } from '@/features/tasks/components/pagination-client.component';
+import { CustomInfoMessage } from '@/ui/custom-info-message';
 
-export const TaskViewComponent = () => {
-  const [page, setPage] = useState({ pageNumber: 1, pageSize: 10 });
-  const {
-    data: tasksResponse,
-    error: tasksError,
-    isLoading: tasksLoading,
-  } = useGetTasksQuery(page);
-
-  const {
-    data: usersResponse,
-    error: usersError,
-    isLoading: usersLoading,
-  } = useGetUsersQuery();
+export const TaskViewComponent = ({
+  users,
+  pageNumber,
+}: {
+  users: IUser[];
+  pageNumber: number;
+}) => {
+  const { data, isLoading: tasksLoading } = useGetTasksQuery({ pageNumber });
 
   if (tasksLoading)
     return (
@@ -27,14 +23,20 @@ export const TaskViewComponent = () => {
         <Loading />
       </Box>
     );
-  if (tasksError) return <div>Error loading tasks</div>;
-  if (!tasksResponse || !tasksResponse.items) return <div>No tasks</div>;
-
-  // if (usersLoading) return <div>Loading users…</div>;
-  if (usersError) return <div>Error loading users</div>;
-  if (!usersResponse) return <div>No users</div>;
+  if (!data || !data.items)
+    return <CustomInfoMessage message='No tasks available' />;
 
   return (
-    <TaskListComponent tasks={tasksResponse.items} users={usersResponse} />
+    <Box>
+      <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12, lg: 12 }}>
+        <TaskListComponent tasks={data.items} users={users} />
+      </Grid>
+      <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>
+        <PaginationClient
+          count={Math.ceil(data.count / 10)}
+          page={pageNumber}
+        />
+      </Box>
+    </Box>
   );
 };
