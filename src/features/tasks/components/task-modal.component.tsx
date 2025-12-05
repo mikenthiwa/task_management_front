@@ -13,7 +13,6 @@ import {
   TextField,
 } from '@mui/material';
 import { useAddTaskMutation } from '@/core/services/task';
-import { useRouter } from 'next/navigation';
 
 const TaskSchema = zod.object({
   title: zod.string().min(1, 'Title is required'),
@@ -29,7 +28,6 @@ export const TaskModalComponent = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [addTask, { isLoading }] = useAddTaskMutation();
-  const router = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -66,7 +64,6 @@ export const TaskModalComponent = () => {
       setFormData({ title: '', description: '' });
       setSubmissionError(null);
       setOpen(false);
-      router.refresh();
     }
   };
 
