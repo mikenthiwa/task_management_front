@@ -1,28 +1,62 @@
 'use client';
-import { MouseEvent } from 'react';
-import { useMemo, useState } from 'react';
+import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import {
   Badge,
   IconButton,
-  Tooltip,
+  ListItemText,
   Menu,
   MenuItem,
-  ListItemText,
-  Divider,
+  Tooltip,
 } from '@mui/material';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import {
   useGetNotificationsQuery,
   useMarkAllAsReadMutation,
 } from '@/core/services/notification';
+import {
+  HubConnection,
+  HubConnectionBuilder,
+  LogLevel,
+} from '@microsoft/signalr';
+import { Notification } from '@/core/common/interfaces/notification';
 
 export const NotificationComponent = ({ userId }: { userId: string }) => {
-  const { data } = useGetNotificationsQuery({
+  const { data, isSuccess } = useGetNotificationsQuery({
     pageNumber: 1,
     pageSize: 5,
     userId,
   });
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const connectionRef = useRef<HubConnection | null>(null);
+  useEffect(() => {
+    if (data && isSuccess) {
+      setNotifications(data.items);
+    }
+  }, [data, isSuccess]);
+
+  // useEffect(() => {
+  //   if (connectionRef.current) return;
+  //   const connect = new HubConnectionBuilder()
+  //     .withUrl('http://localhost:5230/notificationHub')
+  //     .withAutomaticReconnect()
+  //     .configureLogging(LogLevel.Information)
+  //     .build();
+  //   connectionRef.current = connect;
+  //   const handler = (data: Notification) => {
+  //     console.log('Received notification:', data);
+  //     setNotifications((prev) => [...prev, data]);
+  //   };
+  //   connect.start().then(() => {
+  //     connect.on('ReceiveNotification', handler);
+  //   });
+  //
+  //   return () => {
+  //     if (connectionRef.current) {
+  //       connectionRef.current.off('ReceiveNotification');
+  //     }
+  //   };
+  // }, []);
 
   const [markAsRead] = useMarkAllAsReadMutation();
 
@@ -30,8 +64,8 @@ export const NotificationComponent = ({ userId }: { userId: string }) => {
   const open = Boolean(anchorEl);
 
   const unreadCount = useMemo(
-    () => data?.items.filter((i) => !i.isRead).length,
-    [data?.items]
+    () => notifications.filter((i) => !i.isRead).length,
+    [notifications]
   );
 
   const handleOpen = async (event: MouseEvent<HTMLButtonElement>) => {
@@ -66,16 +100,15 @@ export const NotificationComponent = ({ userId }: { userId: string }) => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        {data?.items.length === 0 ? (
+        {notifications.length === 0 ? (
           <MenuItem disabled>
             <ListItemText primary={'No Notification'} />
           </MenuItem>
         ) : (
-          data?.items.map((n, idx) => (
+          notifications.map((n) => (
             <div key={n.id}>
               <MenuItem
                 onClick={() => {
-                  // onItemClickAction?.(n);
                   handleClose();
                 }}
                 className='items-start whitespace-normal'
@@ -85,7 +118,6 @@ export const NotificationComponent = ({ userId }: { userId: string }) => {
                   secondary={formatDate(n.createdAt)}
                 />
               </MenuItem>
-              {idx < data?.items.length - 1 && <Divider component='li' />}
             </div>
           ))
         )}
