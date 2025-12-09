@@ -27,7 +27,7 @@ export const notificationAPI = api.injectEndpoints({
             },
           };
         },
-        keepUnusedDataFor: 5,
+        // keepUnusedDataFor: 0,
         transformResponse: (
           response: ApiResponseWithData<PaginatedResult<Notification>>
         ) => {
