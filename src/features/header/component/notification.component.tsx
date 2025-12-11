@@ -20,12 +20,12 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import { Notification } from '@/core/common/interfaces/notification';
+import { Session } from '@/core/common/interfaces/session';
 
-export const NotificationComponent = ({ userId }: { userId: string }) => {
+export const NotificationComponent = ({ session }: { session: Session }) => {
   const { data, isSuccess } = useGetNotificationsQuery({
     pageNumber: 1,
     pageSize: 5,
-    userId,
   });
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const connectionRef = useRef<HubConnection | null>(null);
@@ -35,28 +35,29 @@ export const NotificationComponent = ({ userId }: { userId: string }) => {
     }
   }, [data, isSuccess]);
 
-  // useEffect(() => {
-  //   if (connectionRef.current) return;
-  //   const connect = new HubConnectionBuilder()
-  //     .withUrl('http://localhost:5230/notificationHub')
-  //     .withAutomaticReconnect()
-  //     .configureLogging(LogLevel.Information)
-  //     .build();
-  //   connectionRef.current = connect;
-  //   const handler = (data: Notification) => {
-  //     console.log('Received notification:', data);
-  //     setNotifications((prev) => [...prev, data]);
-  //   };
-  //   connect.start().then(() => {
-  //     connect.on('ReceiveNotification', handler);
-  //   });
-  //
-  //   return () => {
-  //     if (connectionRef.current) {
-  //       connectionRef.current.off('ReceiveNotification');
-  //     }
-  //   };
-  // }, []);
+  useEffect(() => {
+    if (connectionRef.current) return;
+    const connect = new HubConnectionBuilder()
+      .withUrl(`${process.env.NEXT_PUBLIC_API_BASE_URL}/notificationHub`, {
+        accessTokenFactory: () => session?.user?.accessToken || '',
+      })
+      .withAutomaticReconnect()
+      .configureLogging(LogLevel.Information)
+      .build();
+    connectionRef.current = connect;
+    const handler = (data: Notification) => {
+      setNotifications((prev) => [...prev, data]);
+    };
+    connect.start().then(() => {
+      connect.on('ReceiveNotification', handler);
+    });
+
+    return () => {
+      if (connectionRef.current) {
+        connectionRef.current.off('ReceiveNotification');
+      }
+    };
+  });
 
   const [markAsRead] = useMarkAllAsReadMutation();
 
@@ -70,7 +71,7 @@ export const NotificationComponent = ({ userId }: { userId: string }) => {
 
   const handleOpen = async (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    await markAsRead({ userId: userId });
+    if (unreadCount > 0) await markAsRead();
   };
 
   const handleClose = () => setAnchorEl(null);

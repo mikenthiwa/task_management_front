@@ -70,11 +70,6 @@ export const { handlers, auth } = NextAuth({
         token.refreshToken = user.refreshToken;
         token.tokenType = user.tokenType;
         token.expiresAt = Date.now() + user.expiresIn * 60 * 1000;
-
-        const decoded = safeDecodeJwt<{ sub?: string }>(
-          String(token.accessToken)
-        );
-        if (decoded?.sub) token.sub = decoded.sub;
       }
       if (!token.expiresAt || !token.refreshToken) {
         return token;
@@ -113,19 +108,6 @@ export const { handlers, auth } = NextAuth({
     },
   },
 });
-
-function safeDecodeJwt<T = string>(jwt: string): T | null {
-  try {
-    const [, payload] = jwt.split('.');
-    if (!payload) return null;
-    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
-    // atob is available in Edge runtime
-    const json = atob(base64);
-    return JSON.parse(json) as T;
-  } catch {
-    return null;
-  }
-}
 
 declare module 'next-auth' {
   interface Session {
