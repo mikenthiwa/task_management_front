@@ -1,5 +1,5 @@
 'use client';
-import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import {
   Badge,
@@ -14,50 +14,19 @@ import {
   useGetNotificationsQuery,
   useMarkAllAsReadMutation,
 } from '@/core/services/notification';
-import {
-  HubConnection,
-  HubConnectionBuilder,
-  LogLevel,
-} from '@microsoft/signalr';
 import { Notification } from '@/core/common/interfaces/notification';
-import { Session } from '@/core/common/interfaces/session';
 
-export const NotificationComponent = ({ session }: { session: Session }) => {
+export const NotificationComponent = () => {
   const { data, isSuccess } = useGetNotificationsQuery({
     pageNumber: 1,
     pageSize: 5,
   });
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const connectionRef = useRef<HubConnection | null>(null);
   useEffect(() => {
     if (data && isSuccess) {
       setNotifications(data.items);
     }
   }, [data, isSuccess]);
-
-  useEffect(() => {
-    if (connectionRef.current) return;
-    const connect = new HubConnectionBuilder()
-      .withUrl(`${process.env.NEXT_PUBLIC_API_BASE_URL}/notificationHub`, {
-        accessTokenFactory: () => session?.user?.accessToken || '',
-      })
-      .withAutomaticReconnect()
-      .configureLogging(LogLevel.Information)
-      .build();
-    connectionRef.current = connect;
-    const handler = (data: Notification) => {
-      setNotifications((prev) => [...prev, data]);
-    };
-    connect.start().then(() => {
-      connect.on('ReceiveNotification', handler);
-    });
-
-    return () => {
-      if (connectionRef.current) {
-        connectionRef.current.off('ReceiveNotification');
-      }
-    };
-  });
 
   const [markAsRead] = useMarkAllAsReadMutation();
 

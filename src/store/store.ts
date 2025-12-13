@@ -2,6 +2,7 @@ import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit';
 import { api } from '@/core/services/api';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { rtkErrorHandlerMiddleware } from '@/store/rtk-error-handler.middleware';
+import signalRReducer from '@/realtime/signalR-slice';
 
 export const createStore = (
   options?: ConfigureStoreOptions['preloadedState'] | undefined
@@ -9,6 +10,7 @@ export const createStore = (
   configureStore({
     reducer: {
       [api.reducerPath]: api.reducer,
+      signalR: signalRReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()

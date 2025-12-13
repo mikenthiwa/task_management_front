@@ -1,5 +1,4 @@
 'use client';
-import { useState } from 'react';
 import { IUser } from '@/core/common/interfaces/user';
 import {
   FormControl,
@@ -20,9 +19,6 @@ export const UserSelectorComponent = ({
   assignedUserId?: string | null;
   taskId: number;
 }) => {
-  const [selectedUserId, setSelectedUserId] = useState<string>(
-    assignedUserId ?? ''
-  );
   const [assignTask, { isLoading }] = useAssignTaskMutation();
 
   const handleChange = async (event: SelectChangeEvent<string>) => {
@@ -31,7 +27,6 @@ export const UserSelectorComponent = ({
       assignedId: event.target.value as string,
     });
     if (result.data) {
-      setSelectedUserId(event.target.value);
       toast.success('Task assigned successfully');
     }
   };
@@ -41,7 +36,7 @@ export const UserSelectorComponent = ({
       <Select
         labelId='user-selector-label'
         id='user-selector'
-        value={selectedUserId}
+        value={assignedUserId ?? ''}
         label='Assigned user'
         onChange={handleChange}
         size='small'

@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import HeaderComponent from '@/features/header/component/header.component';
 import { Box } from '@mui/material';
 import { SideBarComponent } from '@/features/side-bar/components/side-bar.component';
+import { SignalRInitializer } from '@/realtime/signalR-initializer';
+import { auth } from '@/auth';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -16,11 +18,14 @@ const geistMono = Geist_Mono({
 });
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await auth();
   return (
     <div
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
+      <SignalRInitializer session={session!} />
+
       <HeaderComponent />
       <Box className='h-screen flex overflow-hidden'>
         <aside className='border-neutral border-r flex-shrink-0 w-[80px] md:min-w-[250px]'>
