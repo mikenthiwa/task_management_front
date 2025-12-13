@@ -5,7 +5,7 @@ import { Action, PayloadAction } from '@reduxjs/toolkit';
 import { getSession } from 'next-auth/react';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`,
   prepareHeaders: async (headers) => {
     if (typeof window === 'undefined') {
       const session = await auth();

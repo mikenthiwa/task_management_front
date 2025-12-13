@@ -19,7 +19,7 @@ export const notificationAPI = api.injectEndpoints({
       >({
         query: (params: NotificationQuery) => {
           return {
-            url: `${endpointUrl}/user/${params.userId}`,
+            url: endpointUrl,
             method: 'GET',
             params: {
               pageNumber: params.pageNumber || 1,
@@ -27,7 +27,6 @@ export const notificationAPI = api.injectEndpoints({
             },
           };
         },
-        // keepUnusedDataFor: 0,
         transformResponse: (
           response: ApiResponseWithData<PaginatedResult<Notification>>
         ) => {
@@ -44,11 +43,10 @@ export const notificationAPI = api.injectEndpoints({
               ]
             : [{ type: 'Notifications' as const, id: 'LIST' }],
       }),
-      markAllAsRead: build.mutation<void, { userId: string }>({
-        query: ({ userId }) => ({
+      markAllAsRead: build.mutation<void, void>({
+        query: () => ({
           url: `${endpointUrl}/mark-all-as-read`,
           method: 'POST',
-          body: { userId },
         }),
         invalidatesTags: [{ type: 'Notifications' as const, id: 'LIST' }],
       }),

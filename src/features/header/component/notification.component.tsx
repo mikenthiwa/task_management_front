@@ -1,5 +1,5 @@
 'use client';
-import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import {
   Badge,
@@ -14,49 +14,19 @@ import {
   useGetNotificationsQuery,
   useMarkAllAsReadMutation,
 } from '@/core/services/notification';
-import {
-  HubConnection,
-  HubConnectionBuilder,
-  LogLevel,
-} from '@microsoft/signalr';
 import { Notification } from '@/core/common/interfaces/notification';
 
-export const NotificationComponent = ({ userId }: { userId: string }) => {
+export const NotificationComponent = () => {
   const { data, isSuccess } = useGetNotificationsQuery({
     pageNumber: 1,
     pageSize: 5,
-    userId,
   });
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const connectionRef = useRef<HubConnection | null>(null);
   useEffect(() => {
     if (data && isSuccess) {
       setNotifications(data.items);
     }
   }, [data, isSuccess]);
-
-  // useEffect(() => {
-  //   if (connectionRef.current) return;
-  //   const connect = new HubConnectionBuilder()
-  //     .withUrl('http://localhost:5230/notificationHub')
-  //     .withAutomaticReconnect()
-  //     .configureLogging(LogLevel.Information)
-  //     .build();
-  //   connectionRef.current = connect;
-  //   const handler = (data: Notification) => {
-  //     console.log('Received notification:', data);
-  //     setNotifications((prev) => [...prev, data]);
-  //   };
-  //   connect.start().then(() => {
-  //     connect.on('ReceiveNotification', handler);
-  //   });
-  //
-  //   return () => {
-  //     if (connectionRef.current) {
-  //       connectionRef.current.off('ReceiveNotification');
-  //     }
-  //   };
-  // }, []);
 
   const [markAsRead] = useMarkAllAsReadMutation();
 
@@ -70,7 +40,7 @@ export const NotificationComponent = ({ userId }: { userId: string }) => {
 
   const handleOpen = async (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    await markAsRead({ userId: userId });
+    if (unreadCount > 0) await markAsRead();
   };
 
   const handleClose = () => setAnchorEl(null);

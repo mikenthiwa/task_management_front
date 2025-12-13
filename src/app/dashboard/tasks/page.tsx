@@ -1,4 +1,4 @@
-import { createStore } from '@/store/store';
+import { createStore } from '@/core/store/store';
 import { Box, Typography } from '@mui/material';
 import { TaskModalComponent } from '@/features/tasks/components/task-modal.component';
 import { userApi } from '@/core/services/users';

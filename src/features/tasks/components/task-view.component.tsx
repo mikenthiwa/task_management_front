@@ -7,6 +7,8 @@ import { Box, Grid } from '@mui/material';
 import { IUser } from '@/core/common/interfaces/user';
 import { PaginationClient } from '@/features/tasks/components/pagination-client.component';
 import { CustomInfoMessage } from '@/ui/custom-info-message';
+import { useEffect, useState } from 'react';
+import { Task } from '@/core/common/interfaces/task';
 
 export const TaskViewComponent = ({
   users,
@@ -15,7 +17,17 @@ export const TaskViewComponent = ({
   users: IUser[];
   pageNumber: number;
 }) => {
-  const { data, isLoading: tasksLoading } = useGetTasksQuery({ pageNumber });
+  const {
+    data,
+    isLoading: tasksLoading,
+    isSuccess,
+  } = useGetTasksQuery({ pageNumber, pageSize: 10 });
+  const [taskList, setTaskList] = useState<Task[]>([]);
+  useEffect(() => {
+    if (data && isSuccess) {
+      setTaskList(data.items);
+    }
+  }, [data, isSuccess]);
 
   if (tasksLoading)
     return (
@@ -29,7 +41,7 @@ export const TaskViewComponent = ({
   return (
     <Box>
       <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12, lg: 12 }}>
-        <TaskListComponent tasks={data.items} users={users} />
+        <TaskListComponent tasks={taskList} users={users} />
       </Grid>
       <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>
         <PaginationClient
