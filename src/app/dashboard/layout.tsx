@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import HeaderComponent from '@/features/header/component/header.component';
 import { Box } from '@mui/material';
 import { SideBarComponent } from '@/features/side-bar/components/side-bar.component';
-import { SignalRInitializer } from '@/realtime/signalR-initializer';
+import { SignalRInitializer } from '@/core/realtime/signalR-initializer';
 import { auth } from '@/auth';
 
 const geistSans = Geist({

@@ -2,8 +2,8 @@ import NextAuth, { User, Session } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { JWT } from 'next-auth/jwt';
 import type { Provider } from 'next-auth/providers';
-import { refreshAccessToken, RefreshTokenError } from '@/core/server/refresh';
-import { socialLogin } from '@/core/server/login';
+import { refreshAccessToken, RefreshTokenError } from '@/core/services/refresh';
+import { socialLogin } from '@/core/services/login';
 import { Token } from '@/core/common/interfaces/token';
 
 const providers: Provider[] = [
@@ -70,6 +70,7 @@ export const { handlers, auth } = NextAuth({
         token.refreshToken = user.refreshToken;
         token.tokenType = user.tokenType;
         token.expiresAt = Date.now() + user.expiresIn * 60 * 1000;
+        return token;
       }
       if (!token.expiresAt || !token.refreshToken) {
         return token;

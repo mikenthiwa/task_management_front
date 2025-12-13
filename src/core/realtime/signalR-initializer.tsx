@@ -6,14 +6,14 @@ import {
   HubConnectionBuilder,
   LogLevel,
 } from '@microsoft/signalr';
-import { useAppDispatch } from '@/store/store';
+import { useAppDispatch } from '@/core/store/store';
 import { Notification } from '@/core/common/interfaces/notification';
 import { Session } from '@/core/common/interfaces/session';
 import { Task } from '@/core/common/interfaces/task';
 import {
   notificationUpdateHandler,
   taskUpdateHandler,
-} from '@/realtime/signalR-handlers';
+} from '@/core/realtime/signalR-handlers';
 
 export const SignalRInitializer = ({ session }: { session: Session }) => {
   const connectionRef = useRef<HubConnection | null>(null);

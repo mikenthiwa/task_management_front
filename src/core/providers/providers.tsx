@@ -1,6 +1,6 @@
 'use client';
 import { Provider } from 'react-redux';
-import { store } from '@/store/store';
+import { store } from '@/core/store/store';
 import { ToastContainer } from 'react-toastify';
 
 export function Providers({ children }: { children: React.ReactNode }) {

@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
-import { Providers } from '@/providers/providers';
+import { Providers } from '@/core/providers/providers';
 import { SessionProvider } from 'next-auth/react';
-import { ThemeProvider } from '@/providers/theme-provider';
+import { ThemeProvider } from '@/core/providers/theme-provider';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { MuiThemeBridge } from '@/providers/mui-theme-provider';
+import { MuiThemeBridge } from '@/core/providers/mui-theme-provider';
 
 import './globals.css';
 
