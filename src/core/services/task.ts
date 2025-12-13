@@ -46,7 +46,7 @@ export const taskAPI = api.injectEndpoints({
             },
           };
         },
-        keepUnusedDataFor: 5,
+        // keepUnusedDataFor: 5,
         transformResponse: (response: ApiResponseWithData<TasksResponse>) =>
           response.data,
         providesTags: (result) =>
@@ -67,7 +67,10 @@ export const taskAPI = api.injectEndpoints({
           body: payload,
         }),
         transformResponse: (response: ApiResponse) => response,
-        invalidatesTags: [{ type: 'Tasks', id: 'LIST' }],
+        invalidatesTags: [
+          { type: 'Tasks', id: 'LIST' },
+          // { type: 'Notifications' as const, id: 'LIST' },
+        ],
       }),
       assignTask: build.mutation<IAssignTaskResponse, IAssignTaskPayload>({
         query: (payload) => ({
