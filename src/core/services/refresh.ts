@@ -19,7 +19,7 @@ export async function refreshAccessToken(payload: string): Promise<{
   expiresIn: number; // epoch ms
 }> {
   const resp = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/refresh-token`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh-token`,
     {
       method: 'POST',
       headers: {
