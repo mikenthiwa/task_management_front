@@ -1,15 +1,16 @@
-import { SettingsTabComponent } from '@/features/settings/components/settings-tab.component';
+import { redirect } from 'next/navigation';
+import { SettingsTabClientComponent } from '@/features/settings/components/settings-tab-client.component';
 
 const SettingsPage = async ({
-  params,
+  searchParams,
 }: {
-  params: Promise<{ tabName: string }>;
+  searchParams: Promise<{ tab: string }>;
 }) => {
-  const value = (await params).tabName || 'appearance';
-  const tabs: { [key: string]: number } = { appearance: 0, profile: 1 };
-  const idx = tabs[value];
+  const tab = (await searchParams).tab;
 
-  return <SettingsTabComponent tabValue={idx} />;
+  if (!tab) redirect('/dashboard/settings?tab=appearance');
+
+  return <SettingsTabClientComponent tab={tab} />;
 };
 
 export default SettingsPage;

@@ -1,6 +1,5 @@
 'use client';
 import React, { useState, ChangeEvent } from 'react';
-import * as zod from 'zod';
 
 import { LoadingButton } from '@mui/lab';
 import {
@@ -13,11 +12,6 @@ import {
   TextField,
 } from '@mui/material';
 import { useAddTaskMutation } from '@/core/services/task';
-
-const TaskSchema = zod.object({
-  title: zod.string().min(1, 'Title is required'),
-  description: zod.string().min(1, 'Description is required'),
-});
 
 export const TaskModalComponent = () => {
   const [open, setOpen] = useState(false);
@@ -49,25 +43,33 @@ export const TaskModalComponent = () => {
 
   const submitForm = async () => {
     setSubmissionError(null);
-    const result = TaskSchema.safeParse(formData);
-    if (!result.success) {
-      const fieldErrors: Record<string, string> = {};
-      result.error.issues.forEach((err) => {
-        if (err.path.length > 0) {
-          fieldErrors[String(err.path[0])] = err.message;
-        }
-      });
-      setErrors(fieldErrors);
-    } else {
-      setErrors({});
-      await addTask(result.data).unwrap();
-      setFormData({ title: '', description: '' });
-      setSubmissionError(null);
-      setOpen(false);
+
+    const fieldErrors: Record<string, string> = {};
+    const title = formData.title?.trim() || '';
+    const description = formData.description?.trim() || '';
+
+    if (!title) {
+      fieldErrors['title'] = 'Title is required';
     }
+    if (!description) {
+      fieldErrors['description'] = 'Description is required';
+    }
+
+    if (Object.keys(fieldErrors).length > 0) {
+      setErrors(fieldErrors);
+      return;
+    }
+
+    setErrors({});
+    await addTask({ title, description }).unwrap();
+    setFormData({ title: '', description: '' });
+    setSubmissionError(null);
+    setOpen(false);
   };
 
-  const isFormValid = TaskSchema.safeParse(formData).success;
+  const isFormValid =
+    (formData.title?.trim()?.length || 0) > 0 &&
+    (formData.description?.trim()?.length || 0) > 0;
 
   return (
     <>
