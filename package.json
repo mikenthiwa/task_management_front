@@ -35,8 +35,7 @@
     "react-toastify": "^11.0.5",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
-    "yup": "^1.7.0",
-    "zod": "^4.1.12"
+    "yup": "^1.7.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
