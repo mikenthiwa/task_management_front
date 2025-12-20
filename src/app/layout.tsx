@@ -1,10 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-
-import { SessionProvider } from 'next-auth/react';
-import { ThemeProvider } from '@/core/providers/theme-provider';
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { MuiThemeBridge } from '@/core/providers/mui-theme-provider';
+import Providers from '@/core/providers';
 
 import './globals.css';
 
@@ -34,13 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          <ThemeProvider>
-            <MuiThemeBridge>
-              <SessionProvider>{children}</SessionProvider>
-            </MuiThemeBridge>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

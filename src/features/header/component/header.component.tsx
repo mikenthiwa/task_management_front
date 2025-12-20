@@ -1,21 +1,22 @@
 import React from 'react';
-import Link from 'next/link';
 import { NotificationComponent } from '@/features/header/component/notification.component';
-import { Box } from '@mui/system';
 import { LogoutComponent } from '@/features/header/component/logout.component';
+import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import { Menu } from '@mui/icons-material';
 
 export default async function HeaderComponent() {
   return (
-    <header className='flex items-center justify-between px-6 py-4 shadow-md bg-background sticky top-0 z-10 border-b border-neutral'>
-      <Link href='/' className='text-xl'>
-        Task Manager
-      </Link>
-      <Box className='flex justify-between items-center gap-4'>
-        <>
-          <NotificationComponent />
-          <LogoutComponent />
-        </>
-      </Box>
-    </header>
+    <AppBar position='static' color='primary'>
+      <Toolbar>
+        <IconButton>
+          <Menu />
+        </IconButton>
+        <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+          Task Manager
+        </Typography>
+        <NotificationComponent />
+        <LogoutComponent />
+      </Toolbar>
+    </AppBar>
   );
 }

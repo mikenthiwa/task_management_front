@@ -5,7 +5,7 @@ import HeaderComponent from '@/features/header/component/header.component';
 import { Box } from '@mui/material';
 import { SideBarComponent } from '@/features/side-bar/components/side-bar.component';
 import { SignalRInitializer } from '@/core/realtime/signalR-initializer';
-import { Providers } from '@/core/providers/providers';
+import { ReduxProvider } from '@/core/providers/redux-provider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -23,7 +23,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <Providers>
+      <ReduxProvider>
         <SignalRInitializer />
 
         <HeaderComponent />
@@ -35,7 +35,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
             {children}
           </main>
         </Box>
-      </Providers>
+      </ReduxProvider>
     </div>
   );
 };
