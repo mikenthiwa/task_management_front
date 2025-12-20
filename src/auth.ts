@@ -6,6 +6,18 @@ import { refreshAccessToken, RefreshTokenError } from '@/core/services/refresh';
 import { socialLogin } from '@/core/services/login';
 import { Token } from '@/core/common/interfaces/token';
 
+const decodeJWT = (accessToken: string): string | undefined => {
+  try {
+    const payload = JSON.parse(
+      Buffer.from(accessToken.split('.')[1], 'base64').toString()
+    );
+    return payload.userId || payload.sub || payload.id;
+  } catch (error) {
+    console.error('Failed to decode JWT:', error);
+    return undefined;
+  }
+};
+
 const providers: Provider[] = [
   GoogleProvider({
     clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -70,6 +82,7 @@ export const { handlers, auth } = NextAuth({
         token.refreshToken = user.refreshToken;
         token.tokenType = user.tokenType;
         token.expiresAt = Date.now() + user.expiresIn * 60 * 1000;
+        token.userId = decodeJWT(user.accessToken);
         return token;
       }
       if (!token.expiresAt || !token.refreshToken) {
@@ -85,6 +98,7 @@ export const { handlers, auth } = NextAuth({
         token.refreshToken = res.refreshToken;
         token.tokenType = res.tokenType;
         token.expiresAt = Date.now() + res.expiresIn * 60 * 1000;
+        token.userId = decodeJWT(res.accessToken);
       } catch (err) {
         const e = err as unknown;
         token.refreshError =
@@ -95,9 +109,7 @@ export const { handlers, auth } = NextAuth({
     async session({ session, token }: { session: Session; token: JWT }) {
       if (!session.user) session.user = {};
       // Expose the authenticated user's id on the session
-      if (token?.sub) {
-        session.user.id = token.sub;
-      }
+      session.user.id = token.userId || token.sub;
       session.user.accessToken = token.accessToken;
       session.user.refreshToken = token.refreshToken;
       session.user.tokenType = token.tokenType;
@@ -135,5 +147,6 @@ declare module 'next-auth/jwt' {
     tokenType: string;
     expiresIn: number;
     sub: string;
+    userId?: string;
   }
 }

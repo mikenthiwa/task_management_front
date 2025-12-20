@@ -9,6 +9,7 @@ import { PaginationClient } from '@/features/tasks/components/pagination-client.
 import { CustomInfoMessage } from '@/ui/custom-info-message';
 import { useEffect, useState } from 'react';
 import { Task } from '@/core/common/interfaces/task';
+import { useSession } from 'next-auth/react';
 
 export const TaskViewComponent = ({
   users,
@@ -17,6 +18,7 @@ export const TaskViewComponent = ({
   users: IUser[];
   pageNumber: number;
 }) => {
+  const { data: session } = useSession();
   const {
     data,
     isLoading: tasksLoading,
@@ -41,7 +43,11 @@ export const TaskViewComponent = ({
   return (
     <Box>
       <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12, lg: 12 }}>
-        <TaskListComponent tasks={taskList} users={users} />
+        <TaskListComponent
+          tasks={taskList}
+          users={users}
+          currentUserId={session?.user?.id}
+        />
       </Grid>
       <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>
         <PaginationClient

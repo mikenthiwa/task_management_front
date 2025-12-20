@@ -1,5 +1,13 @@
 import { IUser } from '@/core/common/interfaces/user';
 
+export enum TaskStatus {
+  new = 'NEW',
+  InProgress = 'InProgress',
+  completed = 'Completed',
+  onHold = 'OnHold',
+  cancelled = 'Cancelled',
+}
+
 export interface Task {
   id: number;
   title: string;
