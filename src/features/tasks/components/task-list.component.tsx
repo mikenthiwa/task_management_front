@@ -37,10 +37,11 @@ export const TaskListComponent = ({
                     currentUserId={currentUserId}
                   />
                 </Stack>
-
-                <Typography className='mb-4' color='text.secondary'>
-                  {task.description}
-                </Typography>
+                <Box className='mb-4'>
+                  <Typography color='text.secondary'>
+                    {task.description}
+                  </Typography>
+                </Box>
 
                 <Box>
                   <UserSelectorComponent
