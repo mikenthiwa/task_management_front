@@ -19,7 +19,7 @@ export const TaskListComponent = ({
       {tasks?.map((task) => {
         return (
           <Grid size={4} key={task.id}>
-            <Card variant='outlined'>
+            <Card>
               <CardContent>
                 <Stack
                   direction='row'

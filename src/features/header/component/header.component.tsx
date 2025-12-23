@@ -1,21 +1,39 @@
+'use client';
 import React from 'react';
 import { NotificationComponent } from '@/features/header/component/notification.component';
 import { LogoutComponent } from '@/features/header/component/logout.component';
-import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import { Menu } from '@mui/icons-material';
 
-export default async function HeaderComponent() {
+export default function HeaderComponent({
+  handleDrawerToggleAction,
+  open,
+}: {
+  handleDrawerToggleAction: () => void;
+  open: boolean;
+}) {
+  const drawerWidth = 250;
   return (
-    <AppBar position='static' color='primary'>
-      <Toolbar>
+    <AppBar
+      position='sticky'
+      sx={{
+        width: { sm: open ? `calc(100% - ${drawerWidth}px)` : '100%' },
+        ml: { sm: open ? `${drawerWidth}px` : '0px' },
+        transition: 'ml 300ms ease-in-out',
+      }}
+    >
+      <Toolbar onClick={handleDrawerToggleAction}>
         <IconButton>
           <Menu />
         </IconButton>
-        <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+        <Typography variant='h6' component='div'>
           Task Manager
         </Typography>
-        <NotificationComponent />
-        <LogoutComponent />
+        <Box sx={{ flexGrow: 1 }} />
+        <Box className='flex'>
+          <NotificationComponent />
+          <LogoutComponent />
+        </Box>
       </Toolbar>
     </AppBar>
   );

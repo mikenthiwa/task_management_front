@@ -4,13 +4,16 @@ import { SessionProvider } from 'next-auth/react';
 
 import { ReactNode } from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+import { ReduxProvider } from '@/core/providers/redux-provider';
 
 const providers = ({ children }: { children: ReactNode }) => {
   return (
     <AppRouterCacheProvider options={{ enableCssLayer: true }}>
       <NextThemeProvider>
         <MuiThemeProviderWrapper>
-          <SessionProvider>{children}</SessionProvider>
+          <SessionProvider>
+            <ReduxProvider>{children}</ReduxProvider>
+          </SessionProvider>
         </MuiThemeProviderWrapper>
       </NextThemeProvider>
     </AppRouterCacheProvider>
