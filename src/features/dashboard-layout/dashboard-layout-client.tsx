@@ -1,5 +1,5 @@
 'use client';
-import { Fragment, ReactNode, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import HeaderComponent from '@/features/header/component/header.component';
 import { PersistentDrawerComponent } from '@/features/side-bar/components/persistent-drawer.component';
 import { Box } from '@mui/material';
@@ -17,7 +17,7 @@ export const DashboardLayoutClient = ({
   const drawerWidth = 250;
 
   return (
-    <Fragment>
+    <Box className='min-h-screen'>
       <HeaderComponent
         handleDrawerToggleAction={handleDrawerToggle}
         open={open}
@@ -34,10 +34,10 @@ export const DashboardLayoutClient = ({
           },
           transition: 'margin-left 300ms ease-in-out',
         }}
-        className='p-6'
+        className='px-8 pt-6 overflow-y-auto'
       >
         {children}
       </Box>
-    </Fragment>
+    </Box>
   );
 };

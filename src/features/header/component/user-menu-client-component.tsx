@@ -7,13 +7,13 @@ import {
   MenuItem,
   Typography,
 } from '@mui/material';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 export const UserMenuClientComponent = () => {
   const { data: session } = useSession();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const menu = ['Logout'];
+  const menu = [{ title: 'Logout', action: signOut }];
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -47,10 +47,10 @@ export const UserMenuClientComponent = () => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        {menu.map((item) => {
+        {menu.map((item, idx) => {
           return (
-            <MenuItem key={item}>
-              <Typography sx={{ textAlign: 'center' }}>{item}</Typography>
+            <MenuItem key={idx} onClick={() => item.action()}>
+              <Typography sx={{ textAlign: 'center' }}>{item.title}</Typography>
             </MenuItem>
           );
         })}

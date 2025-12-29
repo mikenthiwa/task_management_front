@@ -42,7 +42,7 @@ export const TaskViewComponent = ({
 
   return (
     <Box>
-      <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12, lg: 12 }}>
+      <Grid container spacing={2} columns={{ xs: 4, md: 12 }}>
         <TaskListComponent
           tasks={taskList}
           users={users}

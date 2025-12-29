@@ -74,8 +74,7 @@ export const TaskModalComponent = () => {
   return (
     <>
       <Button
-        variant='outlined'
-        className='bg-primary'
+        variant='contained'
         onClick={handleOpen}
         data-testid='open-create-task-button'
         size='small'
@@ -87,6 +86,7 @@ export const TaskModalComponent = () => {
         open={open}
         onClose={handleClose}
         aria-labelledby='create-task-title'
+        color='primary'
       >
         <DialogTitle
           id='create-task-title'

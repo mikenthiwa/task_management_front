@@ -18,7 +18,14 @@ export const MuiThemeProviderWrapper = ({
     return createTheme({
       palette: {
         primary: {
-          main: '#4CAF50',
+          main: '#45ee02',
+          dark: '#30a601',
+          light: '#6af134',
+        },
+        secondary: {
+          main: '#00e5ff',
+          dark: '#00a0b2',
+          light: '#33eaff',
         },
         mode: resolvedTheme === 'dark' ? 'dark' : 'light',
       },
