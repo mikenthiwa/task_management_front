@@ -6,12 +6,19 @@ import { refreshAccessToken, RefreshTokenError } from '@/core/services/refresh';
 import { socialLogin } from '@/core/services/login';
 import { Token } from '@/core/common/interfaces/token';
 
-const decodeJWT = (accessToken: string): string | undefined => {
+interface JwtDecode {
+  id: string;
+  picture: string;
+}
+const decodeJWT = (accessToken: string): JwtDecode | undefined => {
   try {
     const payload = JSON.parse(
       Buffer.from(accessToken.split('.')[1], 'base64').toString()
     );
-    return payload.userId || payload.sub || payload.id;
+    return {
+      id: payload.userId || payload.sub || payload.id,
+      picture: payload.picture,
+    };
   } catch (error) {
     console.error('Failed to decode JWT:', error);
     return undefined;
@@ -22,12 +29,20 @@ const providers: Provider[] = [
   GoogleProvider({
     clientId: process.env.GOOGLE_CLIENT_ID as string,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    authorization: {
+      params: {
+        scope: 'openid email profile',
+        prompt: 'consent', // Forces the consent screen to show every time
+        access_type: 'offline', // Ensures a refresh token is issued (important for future API calls)
+        response_type: 'code',
+      },
+    },
     profile: async (profile): Promise<Token> => {
-      const { email, name } = profile;
+      const { email, name, picture } = profile;
       const username =
         name?.replace(/\s+/g, '').toLowerCase() || email.split('@')[0];
       try {
-        const data = await socialLogin({ username, email });
+        const data = await socialLogin({ username, email, picture });
         return {
           accessToken: data.accessToken,
           refreshToken: data.refreshToken,
@@ -78,11 +93,14 @@ export const { handlers, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }: { token: JWT; user: User }) {
       if (user) {
+        const decodedJwt = decodeJWT(user.accessToken);
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
         token.tokenType = user.tokenType;
         token.expiresAt = Date.now() + user.expiresIn * 60 * 1000;
-        token.userId = decodeJWT(user.accessToken);
+        // token.userId = decodeJWT(user.accessToken);
+        token.userId = decodedJwt?.id;
+        token.picture = decodedJwt?.picture;
         return token;
       }
       if (!token.expiresAt || !token.refreshToken) {
@@ -94,11 +112,14 @@ export const { handlers, auth } = NextAuth({
 
       try {
         const res = await refreshAccessToken(token.refreshToken as string);
+        const decodedJwt = decodeJWT(res.accessToken);
         token.accessToken = res.accessToken;
         token.refreshToken = res.refreshToken;
         token.tokenType = res.tokenType;
         token.expiresAt = Date.now() + res.expiresIn * 60 * 1000;
-        token.userId = decodeJWT(res.accessToken);
+        // token.userId = decodeJWT(res.accessToken);
+        token.userId = decodedJwt?.id;
+        token.picture = decodedJwt?.picture;
       } catch (err) {
         const e = err as unknown;
         token.refreshError =
@@ -110,6 +131,7 @@ export const { handlers, auth } = NextAuth({
       if (!session.user) session.user = {};
       // Expose the authenticated user's id on the session
       session.user.id = token.userId || token.sub;
+      session.user.picture = token.picture || '';
       session.user.accessToken = token.accessToken;
       session.user.refreshToken = token.refreshToken;
       session.user.tokenType = token.tokenType;
@@ -130,6 +152,7 @@ declare module 'next-auth' {
       refreshToken?: string;
       tokenType?: string;
       expiresIn?: number;
+      picture?: string;
     };
   }
   interface User {

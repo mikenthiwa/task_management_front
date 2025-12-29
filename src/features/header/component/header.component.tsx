@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import { NotificationComponent } from '@/features/header/component/notification.component';
-import { LogoutComponent } from '@/features/header/component/logout.component';
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import { Menu } from '@mui/icons-material';
+import { UserMenuClientComponent } from '@/features/header/component/user-menu-client-component';
 
 export default function HeaderComponent({
   handleDrawerToggleAction,
@@ -22,8 +22,8 @@ export default function HeaderComponent({
         transition: 'ml 300ms ease-in-out',
       }}
     >
-      <Toolbar onClick={handleDrawerToggleAction}>
-        <IconButton>
+      <Toolbar>
+        <IconButton onClick={handleDrawerToggleAction}>
           <Menu />
         </IconButton>
         <Typography variant='h6' component='div'>
@@ -32,7 +32,7 @@ export default function HeaderComponent({
         <Box sx={{ flexGrow: 1 }} />
         <Box className='flex'>
           <NotificationComponent />
-          <LogoutComponent />
+          <UserMenuClientComponent />
         </Box>
       </Toolbar>
     </AppBar>
