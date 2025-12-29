@@ -18,7 +18,7 @@ export const TaskListComponent = ({
     <Fragment>
       {tasks?.map((task) => {
         return (
-          <Grid size={4} key={task.id}>
+          <Grid size={{ xs: 4, md: 3 }} key={task.id}>
             <Card variant='outlined'>
               <CardContent>
                 <Stack

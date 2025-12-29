@@ -41,6 +41,7 @@ import { ApiResponseWithData } from '@/core/common/interfaces/ApiResponse';
 export const socialLogin = async (payload: {
   username: string;
   email: string;
+  picture: string;
 }): Promise<Token> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/social-login`,

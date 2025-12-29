@@ -17,7 +17,7 @@ const TasksPage = async ({
   return (
     <Box>
       <Box className='mb-5 flex justify-between'>
-        <Typography variant='h5' fontWeight={700}>
+        <Typography variant='h5' fontWeight='700'>
           All Tasks
         </Typography>
         <Box>

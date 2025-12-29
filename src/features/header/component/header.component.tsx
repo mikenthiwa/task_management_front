@@ -1,21 +1,40 @@
+'use client';
 import React from 'react';
-import Link from 'next/link';
 import { NotificationComponent } from '@/features/header/component/notification.component';
-import { Box } from '@mui/system';
-import { LogoutComponent } from '@/features/header/component/logout.component';
+import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
+import { Menu } from '@mui/icons-material';
+import { UserMenuClientComponent } from '@/features/header/component/user-menu-client-component';
 
-export default async function HeaderComponent() {
+export default function HeaderComponent({
+  handleDrawerToggleAction,
+  open,
+}: {
+  handleDrawerToggleAction: () => void;
+  open: boolean;
+}) {
+  const drawerWidth = 250;
   return (
-    <header className='flex items-center justify-between px-6 py-4 shadow-md bg-background sticky top-0 z-10 border-b border-neutral'>
-      <Link href='/' className='text-xl'>
-        Task Manager
-      </Link>
-      <Box className='flex justify-between items-center gap-4'>
-        <>
+    <AppBar
+      position='sticky'
+      sx={{
+        width: { sm: open ? `calc(100% - ${drawerWidth}px)` : '100%' },
+        ml: { sm: open ? `${drawerWidth}px` : '0px' },
+        transition: 'ml 300ms ease-in-out',
+      }}
+    >
+      <Toolbar>
+        <IconButton onClick={handleDrawerToggleAction}>
+          <Menu />
+        </IconButton>
+        <Typography variant='h6' component='div'>
+          Task Manager
+        </Typography>
+        <Box sx={{ flexGrow: 1 }} />
+        <Box className='flex'>
           <NotificationComponent />
-          <LogoutComponent />
-        </>
-      </Box>
-    </header>
+          <UserMenuClientComponent />
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }

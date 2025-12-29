@@ -1,26 +1,37 @@
 'use client';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material';
+import { useTheme } from 'next-themes';
 
-import React, { useMemo, useEffect, useState } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material';
-import { useTheme as useNextTheme } from 'next-themes';
-
-export function MuiThemeBridge({ children }: { children: React.ReactNode }) {
-  const { resolvedTheme } = useNextTheme();
+export const MuiThemeProviderWrapper = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   const [mounted, setMounted] = useState(false);
+
+  const { resolvedTheme } = useTheme();
+
   useEffect(() => setMounted(true), []);
 
-  const muiTheme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: resolvedTheme === 'dark' ? 'dark' : 'light',
+  const theme = useMemo(() => {
+    return createTheme({
+      palette: {
+        primary: {
+          main: '#45ee02',
+          dark: '#30a601',
+          light: '#6af134',
         },
-      }),
-    [resolvedTheme]
-  );
-  if (!mounted) {
-    return null;
-  }
+        secondary: {
+          main: '#00e5ff',
+          dark: '#00a0b2',
+          light: '#33eaff',
+        },
+        mode: resolvedTheme === 'dark' ? 'dark' : 'light',
+      },
+    });
+  }, [resolvedTheme]);
 
-  return <ThemeProvider theme={muiTheme}>{children}</ThemeProvider>;
-}
+  if (!mounted) return null;
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+};
