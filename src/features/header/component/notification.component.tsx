@@ -8,6 +8,8 @@ import {
   Menu,
   MenuItem,
   Tooltip,
+  Stack,
+  Button,
 } from '@mui/material';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import {
@@ -75,18 +77,32 @@ export const NotificationComponent = () => {
             <ListItemText primary={'No Notification'} />
           </MenuItem>
         ) : (
-          notifications.map((n) => (
-            <div key={n.id}>
+          notifications.map((notification) => (
+            <div key={notification.id}>
               <MenuItem
                 onClick={() => {
                   handleClose();
                 }}
                 className='items-start whitespace-normal'
               >
-                <ListItemText
-                  primary={n.message}
-                  secondary={formatDate(n.createdAt)}
-                />
+                <Stack>
+                  <ListItemText
+                    primary={notification.message}
+                    secondary={formatDate(notification.createdAt)}
+                  />
+                  {notification.action && (
+                    <Button
+                      component='a'
+                      variant='contained'
+                      href={notification.action?.actionUrl}
+                      download
+                      onClick={(event) => event.stopPropagation()}
+                      size='small'
+                    >
+                      {notification.action?.actionLabel}
+                    </Button>
+                  )}
+                </Stack>
               </MenuItem>
             </div>
           ))
