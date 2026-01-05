@@ -14,7 +14,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useGenerateReportMutation } from '@/core/services/report';
-import { endOfDay, format, formatISO, parseISO, startOfDay } from 'date-fns';
+import { endOfDay, format, parseISO, startOfDay } from 'date-fns';
 
 type DateRange = {
   from: string;
@@ -44,13 +44,13 @@ export const ReportModalComponent = () => {
 
   const handleDateChange =
     (field: keyof DateRange) =>
-      (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDateRange((prev) => ({
-          ...prev,
-          [field]: event.target.value,
-        }));
-        setValidationError('');
-      };
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setDateRange((prev) => ({
+        ...prev,
+        [field]: event.target.value,
+      }));
+      setValidationError('');
+    };
 
   const isRangeValid = useMemo(() => {
     const { from, to } = dateRange;
@@ -145,10 +145,10 @@ export const ReportModalComponent = () => {
             />
 
             <TextField
-              type="date"
-              label="To"
+              type='date'
+              label='To'
               fullWidth
-              size="small"
+              size='small'
               value={dateRange.to}
               onChange={handleDateChange('to')}
               error={hasRangeError}
@@ -163,7 +163,7 @@ export const ReportModalComponent = () => {
                   shrink: true,
                 },
               }}
-              data-testid="report-to-date"
+              data-testid='report-to-date'
             />
           </Stack>
         </DialogContent>
