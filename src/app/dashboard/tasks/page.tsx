@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { TaskModalComponent } from '@/features/tasks/components/task-modal.component';
 import { userApi } from '@/core/services/users';
 import { TaskViewComponent } from '@/features/tasks/components/task-view.component';
+import { ReportModalComponent } from '@/features/tasks/components/report-modal.component';
 
 const TasksPage = async ({
   searchParams,
@@ -20,7 +21,8 @@ const TasksPage = async ({
         <Typography variant='h5' fontWeight='700'>
           All Tasks
         </Typography>
-        <Box>
+        <Box className='flex gap-2'>
+          <ReportModalComponent />
           <TaskModalComponent />
         </Box>
       </Box>
