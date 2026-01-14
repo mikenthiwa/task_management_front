@@ -29,6 +29,18 @@ interface AddTaskRequest {
   description?: string;
 }
 
+interface UpdateTaskStatusRequest {
+  taskId: number;
+  status: number;
+}
+
+interface UpdateTaskStatusResponse {
+  id: number;
+  title: string;
+  description: string;
+  status: string;
+}
+
 export const taskAPI = api.injectEndpoints({
   endpoints: (build) => {
     const endpointUrl = '/tasks';
@@ -67,10 +79,7 @@ export const taskAPI = api.injectEndpoints({
           body: payload,
         }),
         transformResponse: (response: ApiResponse) => response,
-        invalidatesTags: [
-          { type: 'Tasks', id: 'LIST' },
-          // { type: 'Notifications' as const, id: 'LIST' },
-        ],
+        invalidatesTags: [{ type: 'Tasks', id: 'LIST' }],
       }),
       assignTask: build.mutation<IAssignTaskResponse, IAssignTaskPayload>({
         query: (payload) => ({
@@ -83,12 +92,30 @@ export const taskAPI = api.injectEndpoints({
         ) => response.data,
         invalidatesTags: [{ type: 'Tasks', id: 'LIST' }],
       }),
+      updateTaskStatus: build.mutation<
+        UpdateTaskStatusResponse,
+        UpdateTaskStatusRequest
+      >({
+        query: (payload) => ({
+          url: `${endpointUrl}/${payload.taskId}/status`,
+          method: 'PATCH',
+          body: { status: payload.status },
+        }),
+        transformResponse: (
+          response: ApiResponseWithData<UpdateTaskStatusResponse>
+        ) => response.data,
+        invalidatesTags: [{ type: 'Tasks', id: 'LIST' }],
+      }),
     };
   },
 });
 
-export const { useGetTasksQuery, useAddTaskMutation, useAssignTaskMutation } =
-  taskAPI;
 export const {
-  endpoints: { getTasks, addTask, assignTask },
+  useGetTasksQuery,
+  useAddTaskMutation,
+  useAssignTaskMutation,
+  useUpdateTaskStatusMutation,
+} = taskAPI;
+export const {
+  endpoints: { getTasks, addTask, assignTask, updateTaskStatus },
 } = taskAPI;

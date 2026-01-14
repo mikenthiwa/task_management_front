@@ -10,6 +10,7 @@ export const ThemeToggleComponent = () => {
     _: React.MouseEvent<HTMLElement>,
     value: string
   ) => {
+    if (!value) return;
     setTheme(value);
   };
 

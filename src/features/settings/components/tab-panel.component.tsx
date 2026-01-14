@@ -1,7 +1,5 @@
 'use client';
 import { Box, Typography } from '@mui/material';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -13,17 +11,6 @@ interface TabPanelProps {
 
 export const TabPanelComponent = (props: TabPanelProps) => {
   const { children, index, value, subtitle, ...other } = props;
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    const tab: { [key: number]: string } = { 0: 'appearance', 1: 'profile' };
-    params.set('tab', tab[value]);
-    router.replace(`${pathname}?${params.toString()}`);
-  }, [pathname, router, searchParams, value]);
-
   return (
     <div
       role='tabpanel'

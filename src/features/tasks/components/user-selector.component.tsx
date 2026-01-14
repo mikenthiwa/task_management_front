@@ -26,6 +26,7 @@ export const UserSelectorComponent = ({
       taskId,
       assignedId: event.target.value as string,
     });
+
     if (result.data) {
       toast.success('Task assigned successfully');
     }

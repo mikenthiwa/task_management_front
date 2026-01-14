@@ -1,7 +1,7 @@
-// components/theme-provider.tsx
+// components/next-theme-provider.tsx
 'use client';
 
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { ThemeProvider } from 'next-themes';
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ interface ThemeProviderProps {
   enableSystem?: boolean;
   disableTransitionOnChange?: boolean;
 }
-export function ThemeProvider({
+export function NextThemeProvider({
   children,
   attribute = 'class',
   defaultTheme = 'system',
@@ -19,7 +19,7 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   return (
-    <NextThemesProvider
+    <ThemeProvider
       attribute={attribute}
       defaultTheme={defaultTheme}
       enableSystem={enableSystem}
@@ -27,6 +27,6 @@ export function ThemeProvider({
       {...props}
     >
       {children}
-    </NextThemesProvider>
+    </ThemeProvider>
   );
 }

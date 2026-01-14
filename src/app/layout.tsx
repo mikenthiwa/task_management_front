@@ -1,21 +1,12 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-
-import { Providers } from '@/core/providers/providers';
-import { SessionProvider } from 'next-auth/react';
-import { ThemeProvider } from '@/core/providers/theme-provider';
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { MuiThemeBridge } from '@/core/providers/mui-theme-provider';
+import { AR_One_Sans } from 'next/font/google';
+import Providers from '@/core/providers';
 
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const arOneSans = AR_One_Sans({
+  variable: '--font-ar-one-sans',
+  weight: ['400', '700'],
   subsets: ['latin'],
 });
 
@@ -31,18 +22,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Providers>
-          <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-            <ThemeProvider>
-              <MuiThemeBridge>
-                <SessionProvider>{children}</SessionProvider>
-              </MuiThemeBridge>
-            </ThemeProvider>
-          </AppRouterCacheProvider>
-        </Providers>
+      <body className={`${arOneSans.variable} antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
