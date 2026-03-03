@@ -9,21 +9,23 @@ import {
 } from '@mui/material';
 import { useAssignTaskMutation } from '@/core/services/task';
 import { toast } from 'react-toastify';
+import { Task } from '@/core/common/interfaces/task';
 
 export const UserSelectorComponent = ({
   users,
   assignedUserId,
-  taskId,
+  task,
 }: {
   users: IUser[];
   assignedUserId?: string | null;
-  taskId: number;
+  task: Task;
 }) => {
   const [assignTask, { isLoading }] = useAssignTaskMutation();
 
   const handleChange = async (event: SelectChangeEvent<string>) => {
     const result = await assignTask({
-      taskId,
+      taskId: task.id,
+      rowVersion: task.rowVersion,
       assignedId: event.target.value as string,
     });
 

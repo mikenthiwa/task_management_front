@@ -85,7 +85,10 @@ export const taskAPI = api.injectEndpoints({
         query: (payload) => ({
           url: `${endpointUrl}/${payload.taskId}/assign`,
           method: 'POST',
-          body: { assignedId: payload.assignedId },
+          body: {
+            assignedId: payload.assignedId,
+            rowVersion: payload.rowVersion,
+          },
         }),
         transformResponse: (
           response: ApiResponseWithData<IAssignTaskResponse>
