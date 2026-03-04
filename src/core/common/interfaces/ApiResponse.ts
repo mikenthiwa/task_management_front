@@ -11,6 +11,7 @@ export interface ApiResponseWithData<T> extends ApiResponse {
 export interface ErrorResponse {
   type: string;
   title: string;
+  detail: string;
   status: number;
   traceId: string;
   errors: Record<string, string[]>;

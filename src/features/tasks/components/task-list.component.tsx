@@ -47,7 +47,7 @@ export const TaskListComponent = ({
                   <UserSelectorComponent
                     users={users}
                     assignedUserId={task.assignee?.id}
-                    taskId={task.id}
+                    task={task}
                   />
                 </Box>
               </CardContent>

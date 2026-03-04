@@ -11,7 +11,7 @@ export function extractApiErrorMessage(error: ErrorResponse): string {
     }
   }
 
-  if (error.title) return error.title;
+  if (error.detail) return error.detail;
 
   return 'Something went wrong';
 }

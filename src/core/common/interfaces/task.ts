@@ -15,11 +15,13 @@ export interface Task {
   status: string;
   assignee: IUser;
   creator: string;
+  rowVersion: number;
 }
 
 export interface IAssignTaskPayload {
   taskId: number;
   assignedId: string;
+  rowVersion: number;
 }
 
 export interface IAssignTaskResponse {
