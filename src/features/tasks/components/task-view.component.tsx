@@ -10,6 +10,7 @@ import { CustomInfoMessage } from '@/ui/custom-info-message';
 import { useEffect, useState } from 'react';
 import { Task } from '@/core/common/interfaces/task';
 import { useSession } from 'next-auth/react';
+import { DEFAULT_PAGE_SIZE } from '@/core/common/constants';
 
 export const TaskViewComponent = ({
   users,
@@ -23,7 +24,7 @@ export const TaskViewComponent = ({
     data,
     isLoading: tasksLoading,
     isSuccess,
-  } = useGetTasksQuery({ pageNumber, pageSize: 10 });
+  } = useGetTasksQuery({ pageNumber, pageSize: DEFAULT_PAGE_SIZE });
   const [taskList, setTaskList] = useState<Task[]>([]);
   useEffect(() => {
     if (data && isSuccess) {
@@ -51,7 +52,7 @@ export const TaskViewComponent = ({
       </Grid>
       <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>
         <PaginationClient
-          count={Math.ceil(data.count / 10)}
+          count={Math.ceil(data.count / DEFAULT_PAGE_SIZE)}
           page={pageNumber}
         />
       </Box>

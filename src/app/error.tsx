@@ -17,11 +17,11 @@ export default function Error({
   }, [error]);
 
   return (
-    <Box className='flex justify-center'>
+    <Box className='flex justify-center items-center min-h-screen'>
       <Box
         role='alert'
         aria-live='assertive'
-        className='w-full max-w-md rounded-xl border border-neutral-strong shadow-lg '
+        className='w-full max-w-md rounded-xl border border-neutral-strong shadow-lg'
       >
         <Box className='px-6 pt-6 pb-4 text-center'>
           <Box className='mx-auto mb-4 w-12 h-12 rounded-full flex items-center justify-center'>

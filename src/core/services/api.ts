@@ -38,10 +38,7 @@ const extractRehydrationInfo = (
   }
 };
 
-// const baseQueryWithRetry = retry(baseQuery);
-
 export const api = createApi({
-  // reducerPath: 'api',
   baseQuery: baseQuery,
   extractRehydrationInfo,
   tagTypes: ['Tasks', 'Users', 'Notifications'],
