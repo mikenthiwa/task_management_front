@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { AR_One_Sans } from 'next/font/google';
+import { AR_One_Sans, Inter } from 'next/font/google';
+
 import Providers from '@/core/providers';
 
 import './globals.css';
@@ -8,6 +9,11 @@ const arOneSans = AR_One_Sans({
   variable: '--font-ar-one-sans',
   weight: ['400', '700'],
   subsets: ['latin'],
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
 });
 
 export const metadata: Metadata = {
@@ -22,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${arOneSans.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>
