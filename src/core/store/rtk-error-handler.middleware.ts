@@ -15,7 +15,7 @@ export const rtkErrorHandlerMiddleware: Middleware =
       if (typeof window !== 'undefined') {
         toast.error(message);
       } else {
-        throw new Error('message');
+        throw new Error(message);
       }
     }
     return next(action);
