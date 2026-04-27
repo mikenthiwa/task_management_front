@@ -14,6 +14,7 @@ interface GetTasksQuery {
   pageSize?: number;
   status?: string;
   assignedTo?: string;
+  searchTerm?: string;
 }
 
 interface TasksResponse {
@@ -55,6 +56,7 @@ export const taskAPI = api.injectEndpoints({
               pageSize: params.pageSize || 10,
               status: params.status,
               assignedTo: params.assignedTo,
+              SearchTerm: params.searchTerm,
             },
           };
         },
@@ -109,25 +111,6 @@ export const taskAPI = api.injectEndpoints({
         ) => response.data,
         invalidatesTags: [{ type: 'Tasks', id: 'LIST' }],
       }),
-      searchTasks: build.query<Task[], { searchTerm: string }>({
-        query: ({ searchTerm }) => ({
-          url: `${endpointUrl}/search`,
-          method: 'GET',
-          params: { searchTerm },
-        }),
-        transformResponse: (response: ApiResponseWithData<Task[]>) =>
-          response.data,
-        providesTags: (result) =>
-          result
-            ? [
-                ...result.items.map(({ id }) => ({
-                  type: 'Tasks' as const,
-                  id,
-                })),
-                { type: 'Tasks' as const, id: 'LIST' },
-              ]
-            : [{ type: 'Tasks' as const, id: 'LIST' }],
-      }),
     };
   },
 });
@@ -137,8 +120,7 @@ export const {
   useAddTaskMutation,
   useAssignTaskMutation,
   useUpdateTaskStatusMutation,
-  useSearchTasksQuery,
 } = taskAPI;
 export const {
-  endpoints: { getTasks, addTask, assignTask, updateTaskStatus, searchTasks },
+  endpoints: { getTasks, addTask, assignTask, updateTaskStatus },
 } = taskAPI;
