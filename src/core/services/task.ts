@@ -109,6 +109,25 @@ export const taskAPI = api.injectEndpoints({
         ) => response.data,
         invalidatesTags: [{ type: 'Tasks', id: 'LIST' }],
       }),
+      searchTasks: build.query<Task[], { searchTerm: string }>({
+        query: ({ searchTerm }) => ({
+          url: `${endpointUrl}/search`,
+          method: 'GET',
+          params: { searchTerm },
+        }),
+        transformResponse: (response: ApiResponseWithData<Task[]>) =>
+          response.data,
+        providesTags: (result) =>
+          result
+            ? [
+                ...result.items.map(({ id }) => ({
+                  type: 'Tasks' as const,
+                  id,
+                })),
+                { type: 'Tasks' as const, id: 'LIST' },
+              ]
+            : [{ type: 'Tasks' as const, id: 'LIST' }],
+      }),
     };
   },
 });
@@ -118,7 +137,8 @@ export const {
   useAddTaskMutation,
   useAssignTaskMutation,
   useUpdateTaskStatusMutation,
+  useSearchTasksQuery,
 } = taskAPI;
 export const {
-  endpoints: { getTasks, addTask, assignTask, updateTaskStatus },
+  endpoints: { getTasks, addTask, assignTask, updateTaskStatus, searchTasks },
 } = taskAPI;
