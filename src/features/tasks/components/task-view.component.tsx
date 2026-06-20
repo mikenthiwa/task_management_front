@@ -7,39 +7,49 @@ import { Box, Grid } from '@mui/material';
 import { IUser } from '@/core/common/interfaces/user';
 import { PaginationClient } from '@/features/tasks/components/pagination-client.component';
 import { CustomInfoMessage } from '@/ui/custom-info-message';
-import { useEffect, useState } from 'react';
-import { Task } from '@/core/common/interfaces/task';
 import { useSession } from 'next-auth/react';
 import { DEFAULT_PAGE_SIZE } from '@/core/common/constants';
 
 export const TaskViewComponent = ({
   users,
   pageNumber,
+  status,
+  assignedTo,
+  searchTerm,
 }: {
   users: IUser[];
   pageNumber: number;
+  status?: string;
+  assignedTo?: string;
+  searchTerm?: string;
 }) => {
   const { data: session } = useSession();
-  const {
-    data,
-    isLoading: tasksLoading,
-    isSuccess,
-  } = useGetTasksQuery({ pageNumber, pageSize: DEFAULT_PAGE_SIZE });
-  const [taskList, setTaskList] = useState<Task[]>([]);
-  useEffect(() => {
-    if (data && isSuccess) {
-      setTaskList(data.items);
-    }
-  }, [data, isSuccess]);
+  const isSearching = !!searchTerm && searchTerm.trim().length > 0;
+  const { data, isLoading, isSuccess } = useGetTasksQuery({
+    pageNumber,
+    pageSize: DEFAULT_PAGE_SIZE,
+    status,
+    assignedTo,
+    searchTerm: searchTerm?.trim(),
+  });
+  const taskList = isSuccess ? data.items : [];
 
-  if (tasksLoading)
+  if (isLoading)
     return (
       <Box className='w-full'>
         <Loading />
       </Box>
     );
-  if (!data || !data.items)
-    return <CustomInfoMessage message='No tasks available' />;
+  if (!data || taskList.length === 0)
+    return (
+      <CustomInfoMessage
+        message={
+          isSearching
+            ? `No tasks found for "${searchTerm}"`
+            : 'No tasks available'
+        }
+      />
+    );
 
   return (
     <Box>
@@ -50,12 +60,14 @@ export const TaskViewComponent = ({
           currentUserId={session?.user?.id}
         />
       </Grid>
-      <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>
-        <PaginationClient
-          count={Math.ceil(data.count / DEFAULT_PAGE_SIZE)}
-          page={pageNumber}
-        />
-      </Box>
+      {data && (
+        <Box className='fixed bottom-5 left-1/2 -translate-x-1/2'>
+          <PaginationClient
+            count={Math.ceil(data.count / DEFAULT_PAGE_SIZE)}
+            page={pageNumber}
+          />
+        </Box>
+      )}
     </Box>
   );
 };

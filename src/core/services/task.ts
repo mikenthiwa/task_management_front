@@ -14,6 +14,7 @@ interface GetTasksQuery {
   pageSize?: number;
   status?: string;
   assignedTo?: string;
+  searchTerm?: string;
 }
 
 interface TasksResponse {
@@ -55,6 +56,7 @@ export const taskAPI = api.injectEndpoints({
               pageSize: params.pageSize || 10,
               status: params.status,
               assignedTo: params.assignedTo,
+              SearchTerm: params.searchTerm,
             },
           };
         },
